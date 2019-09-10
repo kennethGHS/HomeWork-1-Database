@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS Aeropuerto
     Ciudad       TEXT    NOT NULL,
     Horario      TEXT    NOT NULL
 );
-
-SELECT *
-FROM Aeropuerto;
+--
+-- SELECT *
+-- FROM Aeropuerto;
 
 CREATE TABLE IF NOT EXISTS NumTelAeropuerto
 (
@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS NumTelAeropuerto
     FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto)
 );
 
-SELECT *
-FROM NumTelAeropuerto;
+-- SELECT *
+-- FROM NumTelAeropuerto;
 
 CREATE TABLE IF NOT EXISTS EmpleadoAeropuerto
 (
@@ -76,7 +76,19 @@ CREATE TABLE IF NOT EXISTS Avion
     Fabricante    TEXT    NOT NULL,
     FOREIGN KEY (IdAerolinea) REFERENCES Aerolinea (IdAerolinea)
 );
-
+CREATE TABLE IF NOT EXISTS AvionAeropuerto
+(
+    IdAvion      INTEGER NOT NULL,
+    IdAeropuerto INTEGER NOT NULL,
+    Dentro       BOOLEAN NOT NULL,
+    FOREIGN KEY (IdAvion) REFERENCES Avion (IdAvion),
+    FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto)
+);
+CREATE TABLE IF NOT EXISTS AeropuertoAerolinea
+(
+    IdAerolinea  INTEGER NOT NULL,
+    IdAeropuerto INTEGER NOT NULL
+);
 CREATE TABLE IF NOT EXISTS ClasesAvion
 (
     IdClasesAvion INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -93,10 +105,26 @@ CREATE TABLE IF NOT EXISTS RelClasesAvion
 
 CREATE TABLE IF NOT EXISTS Taller
 (
-    IdTaller INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    Nombre   TEXT    NOT NULL
+    IdTaller     INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    IdAeropuerto INTEGER NOT NULL,
+    Nombre       TEXT    NOT NULL,
+    FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto)
 );
-
+CREATE TABLE IF NOT EXISTS Bodega
+(
+    IdBodega     INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    IdAeropuerto INTEGER NOT NULL,
+    Nombre       TEXT    NOT NULL,
+    FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto)
+);
+CREATE TABLE IF NOT EXISTS BodegaAvion
+(
+    IdBodega INTEGER NOT NULL,
+    IdAvion  INTEGER NOT NULL,
+    CurrentlyIn BOOLEAN NOT NULL ,
+    FOREIGN KEY (IdBodega) REFERENCES Bodega (IdBodega),
+    FOREIGN KEY (IdAvion) REFERENCES Avion (IdAvion)
+);
 CREATE TABLE IF NOT EXISTS Factura
 (
     IdFactura    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
