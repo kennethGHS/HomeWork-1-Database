@@ -7,21 +7,14 @@ CREATE TABLE IF NOT EXISTS Aeropuerto
     Ciudad       TEXT    NOT NULL,
     Horario      TEXT    NOT NULL
 );
---
--- SELECT *
--- FROM Aeropuerto;
 
 CREATE TABLE IF NOT EXISTS NumTelAeropuerto
 (
     IdNumTelAeropuerto INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    NumTelefonico      TEXT    NOT NULL,
     IdAeropuerto       INTEGER NOT NULL,
+    NumTelefonico      TEXT    NOT NULL,
     FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto)
 );
-
--- SELECT *
--- FROM NumTelAeropuerto;
-
 
 CREATE TABLE IF NOT EXISTS Aerolinea
 (
@@ -29,7 +22,6 @@ CREATE TABLE IF NOT EXISTS Aerolinea
     Codigo      TEXT    NOT NULL,
     Nombre      TEXT    NOT NULL
 );
-
 
 
 CREATE TABLE IF NOT EXISTS Avion
@@ -161,8 +153,8 @@ CREATE TABLE IF NOT EXISTS Pasajero
 CREATE TABLE IF NOT EXISTS NumTelPasajero
 (
     IdNumTelPasajero INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    NumTelefonico    TEXT    NOT NULL,
     IdPasajero       INTEGER NOT NULL,
+    NumTelefonico    TEXT    NOT NULL,
     FOREIGN KEY (IdPasajero) REFERENCES Pasajero (IdPasajero)
 );
 
@@ -196,14 +188,14 @@ CREATE TABLE IF NOT EXISTS Conexion
     FOREIGN KEY (IdVuelo) REFERENCES Vuelo (IdVuelo)
 );
 
-select aero.*
-FROM (select avion.IdAerolinea
-      FROM Avion avion
-      GROUP BY avion.IdAerolinea
-      ORDER BY COUNT(avion.IdAerolinea) desc) result,
-     Aerolinea aero
-WHERE aero.IdAerolinea = result.IdAerolinea
-LIMIT 10;
+-- select aero.*
+-- FROM (select avion.IdAerolinea
+--       FROM Avion avion
+--       GROUP BY avion.IdAerolinea
+--       ORDER BY COUNT(avion.IdAerolinea) desc) result,
+--      Aerolinea aero
+-- WHERE aero.IdAerolinea = result.IdAerolinea
+-- LIMIT 10;
 
 -- INSERT INTO Aerolinea(CodigoAerolinea,Nombre)
 -- values ('123K','AMERICAN AIRLINES'),
@@ -253,14 +245,7 @@ CREATE TABLE IF NOT EXISTS EmpleadoAeropuerto
     IdEmpleado   INTEGER NOT NULL,
     IdAeropuerto INTEGER NOT NULL,
     IdPuesto     INTEGER NOT NULL,
-    Cedula       TEXT    NOT NULL,
-    CuentaBanco  TEXT    NOT NULL,
-    Pais         TEXT    NOT NULL,
-    Ciudad       TEXT    NOT NULL,
-    Calle        TEXT    NOT NULL,
-    Casa         TEXT    NOT NULL,
-    Puesto       TEXT    NOT NULL,
-    Salario      DOUBLE  NOT NULL,
+    Salario      TEXT    NOT NULL,
     FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto),
     FOREIGN KEY (IdEmpleado) REFERENCES Empleado (IdEmpleado),
     FOREIGN KEY (IdPuesto) REFERENCES PuestoAeropuerto (IdPuesto)
@@ -271,16 +256,20 @@ CREATE TABLE IF NOT EXISTS EmpleadoAerolinea
     IdEmpleado  INTEGER NOT NULL,
     IdPuesto    INTEGER NOT NULL,
     IdAerolinea INTEGER NOT NULL,
-    Puesto      TEXT    NOT NULL,
-    Salario     DOUBLE  NOT NULL,
+    Salario     TEXT    NOT NULL,
     FOREIGN KEY (IdAerolinea) REFERENCES Aerolinea (IdAerolinea),
     FOREIGN KEY (IdEmpleado) REFERENCES Empleado (IdEmpleado),
     FOREIGN KEY (IdPuesto) REFERENCES PuestoAerolinea (IdPuesto)
 );
+
 CREATE TABLE IF NOT EXISTS Empleado
 (
     IdEmpleado  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     Codigo      TEXT    NOT NULL,
+    Nombre      TEXT    NOT NULL,
+    Apellido1   TEXT    NOT NULL,
+    Apellido2   TEXT    NOT NULL,
+    Cedula      TEXT    NOT NULL,
     CuentaBanco TEXT    NOT NULL,
     Pais        TEXT    NOT NULL,
     Ciudad      TEXT    NOT NULL,
@@ -288,13 +277,29 @@ CREATE TABLE IF NOT EXISTS Empleado
     Casa        TEXT    NOT NULL,
     Horario     TEXT    NOT NULL
 );
+
+
 CREATE TABLE IF NOT EXISTS PuestoAeropuerto
 (
     IdPuesto     INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     NombreEmpleo TEXT    NOT NULL
 );
+
+-- INSERT INTO PuestoAeropuerto
+-- VALUES (0, 'Despachador de vuelos'),
+--        (1, 'Tecnico administrativos'),
+--        (2, 'Agente de servicios aeroportuarios'),
+--        (3, 'Auxiliar de tierra');
+
 CREATE TABLE IF NOT EXISTS PuestoAerolinea
 (
     IdPuesto     INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     NombreEmpleo TEXT    NOT NULL
 );
+
+-- INSERT INTO PuestoAerolinea
+-- VALUES (0, 'Piloto'),
+--        (1, 'Azafata'),
+--        (2, 'Copiloto');
+
+SELECT MAX(IdEmpleado) FROM Empleado;
