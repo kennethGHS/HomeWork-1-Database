@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS Aeropuerto
 CREATE TABLE IF NOT EXISTS NumTelAeropuerto
 (
     IdNumTelAeropuerto INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    NumTelefonico      INTEGER NOT NULL,
+    NumTelefonico      TEXT    NOT NULL,
     IdAeropuerto       INTEGER NOT NULL,
     FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto)
 );
@@ -161,7 +161,7 @@ CREATE TABLE IF NOT EXISTS Pasajero
 CREATE TABLE IF NOT EXISTS NumTelPasajero
 (
     IdNumTelPasajero INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    NumTelefonico    INTEGER NOT NULL,
+    NumTelefonico    TEXT    NOT NULL,
     IdPasajero       INTEGER NOT NULL,
     FOREIGN KEY (IdPasajero) REFERENCES Pasajero (IdPasajero)
 );
@@ -252,6 +252,7 @@ CREATE TABLE IF NOT EXISTS EmpleadoAeropuerto
 (
     IdEmpleado   INTEGER NOT NULL,
     IdAeropuerto INTEGER NOT NULL,
+    IdPuesto     INTEGER NOT NULL,
     Cedula       TEXT    NOT NULL,
     CuentaBanco  TEXT    NOT NULL,
     Pais         TEXT    NOT NULL,
@@ -261,18 +262,20 @@ CREATE TABLE IF NOT EXISTS EmpleadoAeropuerto
     Puesto       TEXT    NOT NULL,
     Salario      DOUBLE  NOT NULL,
     FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto),
-    FOREIGN KEY (IdEmpleado) REFERENCES Empleado (IdEmpleado)
+    FOREIGN KEY (IdEmpleado) REFERENCES Empleado (IdEmpleado),
+    FOREIGN KEY (IdPuesto) REFERENCES PuestoAeropuerto (IdPuesto)
 
 );
 CREATE TABLE IF NOT EXISTS EmpleadoAerolinea
 (
     IdEmpleado  INTEGER NOT NULL,
+    IdPuesto    INTEGER NOT NULL,
     IdAerolinea INTEGER NOT NULL,
     Puesto      TEXT    NOT NULL,
     Salario     DOUBLE  NOT NULL,
     FOREIGN KEY (IdAerolinea) REFERENCES Aerolinea (IdAerolinea),
-    FOREIGN KEY (IdEmpleado) REFERENCES Empleado (IdEmpleado)
-
+    FOREIGN KEY (IdEmpleado) REFERENCES Empleado (IdEmpleado),
+    FOREIGN KEY (IdPuesto) REFERENCES PuestoAerolinea (IdPuesto)
 );
 CREATE TABLE IF NOT EXISTS Empleado
 (
@@ -284,4 +287,14 @@ CREATE TABLE IF NOT EXISTS Empleado
     Calle       TEXT    NOT NULL,
     Casa        TEXT    NOT NULL,
     Horario     TEXT    NOT NULL
+);
+CREATE TABLE IF NOT EXISTS PuestoAeropuerto
+(
+    IdPuesto     INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    NombreEmpleo TEXT    NOT NULL
+);
+CREATE TABLE IF NOT EXISTS PuestoAerolinea
+(
+    IdPuesto     INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    NombreEmpleo TEXT    NOT NULL
 );
