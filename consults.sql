@@ -18,15 +18,13 @@ FROM (SELECT relacion.*
 WHERE aero.IdAeropuerto = resulta.IdAeropuerto;
 --Promedio del salario del los 5 aeropuertos con mas empleados
 SELECT AVG(empleado.Salario)
-FROM (SELECT aero.IdAeropuerto
-      FROM EmpleadoAeropuerto result,
-           Aeropuerto aero
-      WHERE aero.IdAeropuerto = result.IdAeropuerto
-      ORDER BY COUNT(result.IdAeropuerto) DESC
-      LIMIT 5
-     ) resultado,
-     EmpleadoAeropuerto empleado
-WHERE empleado.IdAeropuerto = resultado.IdAeropuerto;
+FROM (SELECT aero.IdAeropuerto, COUNT(result.IdAeropuerto) AS cuenta
+      FROM EmpleadoAeropuerto result
+               INNER JOIN Aeropuerto aero USING (IdAeropuerto)
+      ORDER BY cuenta DESC
+      LIMIT 1
+     ) resultado
+     INNER JOIN EmpleadoAeropuerto empleado USING (IdAeropuerto);
 
 --Empleado mas pagado de aeropuerto y aerolinea
 SELECT empleadoAerolinea.*, empleadoAeropuerto.*
@@ -57,4 +55,5 @@ WHERE facturas.IdTaller = talleres.IdTaller;
 
 SELECT COUNT(*)
 FROM BodegaAvion bodegas
-WHERE bodegas.IdBodega = 1243 AND bodegas.CurrentlyIn =1;
+WHERE bodegas.IdBodega = 1243
+  AND bodegas.CurrentlyIn = 1;

@@ -22,25 +22,6 @@ CREATE TABLE IF NOT EXISTS NumTelAeropuerto
 -- SELECT *
 -- FROM NumTelAeropuerto;
 
-CREATE TABLE IF NOT EXISTS EmpleadoAeropuerto
-(
-    IdEmpleado   INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    IdAeropuerto INTEGER NOT NULL,
-    Codigo       TEXT    NOT NULL,
-    Nombre       TEXT    NOT NULL,
-    Apellido1    TEXT    NOT NULL,
-    Apellido2    TEXT    NOT NULL,
-    Cedula       TEXT    NOT NULL,
-    CuentaBanco  TEXT    NOT NULL,
-    Pais         TEXT    NOT NULL,
-    Ciudad       TEXT    NOT NULL,
-    Calle        TEXT    NOT NULL,
-    Casa         TEXT    NOT NULL,
-    Horario      TEXT    NOT NULL,
-    Puesto       TEXT    NOT NULL,
-    Salario      DOUBLE  NOT NULL,
-    FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto)
-);
 
 CREATE TABLE IF NOT EXISTS Aerolinea
 (
@@ -49,20 +30,7 @@ CREATE TABLE IF NOT EXISTS Aerolinea
     Nombre      TEXT    NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS EmpleadoAerolinea
-(
-    IdEmpleado  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    IdAerolinea INTEGER NOT NULL,
-    Codigo      TEXT    NOT NULL,
-    Nombre      TEXT    NOT NULL,
-    Apellido1   TEXT    NOT NULL,
-    Apellido2   TEXT    NOT NULL,
-    Cedula      TEXT    NOT NULL,
-    Horario     TEXT    NOT NULL,
-    Puesto      TEXT    NOT NULL,
-    Salario     DOUBLE  NOT NULL,
-    FOREIGN KEY (IdAerolinea) REFERENCES Aerolinea (IdAerolinea)
-);
+
 
 CREATE TABLE IF NOT EXISTS Avion
 (
@@ -99,7 +67,7 @@ CREATE TABLE IF NOT EXISTS RelClasesAvion
 (
     IdClase INTEGER NOT NULL,
     IdVuelo INTEGER NOT NULL,
-    FOREIGN KEY (IdClase) REFERENCES ClasesAvion (IdClase),
+    FOREIGN KEY (IdClase) REFERENCES ClasesAvion (IdClasesAvion),
     FOREIGN KEY (IdVuelo) REFERENCES Avion (IdAvion)
 );
 
@@ -119,9 +87,9 @@ CREATE TABLE IF NOT EXISTS Bodega
 );
 CREATE TABLE IF NOT EXISTS BodegaAvion
 (
-    IdBodega INTEGER NOT NULL,
-    IdAvion  INTEGER NOT NULL,
-    CurrentlyIn BOOLEAN NOT NULL ,
+    IdBodega    INTEGER NOT NULL,
+    IdAvion     INTEGER NOT NULL,
+    CurrentlyIn BOOLEAN NOT NULL,
     FOREIGN KEY (IdBodega) REFERENCES Bodega (IdBodega),
     FOREIGN KEY (IdAvion) REFERENCES Avion (IdAvion)
 );
@@ -280,5 +248,40 @@ LIMIT 10;
 --        (11, 'ABC26', 'REDDRAGON', 2, 234, 'ACTIVO', 'LOL');
 
 
+CREATE TABLE IF NOT EXISTS EmpleadoAeropuerto
+(
+    IdEmpleado   INTEGER NOT NULL,
+    IdAeropuerto INTEGER NOT NULL,
+    Cedula       TEXT    NOT NULL,
+    CuentaBanco  TEXT    NOT NULL,
+    Pais         TEXT    NOT NULL,
+    Ciudad       TEXT    NOT NULL,
+    Calle        TEXT    NOT NULL,
+    Casa         TEXT    NOT NULL,
+    Puesto       TEXT    NOT NULL,
+    Salario      DOUBLE  NOT NULL,
+    FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto),
+    FOREIGN KEY (IdEmpleado) REFERENCES Empleado (IdEmpleado)
 
+);
+CREATE TABLE IF NOT EXISTS EmpleadoAerolinea
+(
+    IdEmpleado  INTEGER NOT NULL,
+    IdAerolinea INTEGER NOT NULL,
+    Puesto      TEXT    NOT NULL,
+    Salario     DOUBLE  NOT NULL,
+    FOREIGN KEY (IdAerolinea) REFERENCES Aerolinea (IdAerolinea),
+    FOREIGN KEY (IdEmpleado) REFERENCES Empleado (IdEmpleado)
 
+);
+CREATE TABLE IF NOT EXISTS Empleado
+(
+    IdEmpleado  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Codigo      TEXT    NOT NULL,
+    CuentaBanco TEXT    NOT NULL,
+    Pais        TEXT    NOT NULL,
+    Ciudad      TEXT    NOT NULL,
+    Calle       TEXT    NOT NULL,
+    Casa        TEXT    NOT NULL,
+    Horario     TEXT    NOT NULL
+);
