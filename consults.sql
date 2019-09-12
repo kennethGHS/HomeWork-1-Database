@@ -26,18 +26,18 @@ FROM (SELECT aero.IdAeropuerto, COUNT(result.IdAeropuerto) AS cuenta
 SELECT empleadoAerolinea.*, empleadoAeropuerto.*
 FROM (SELECT empleado.*
       FROM EmpleadoAeropuerto empleado
-      WHERE 123 = empleado.IdAeropuerto
+      WHERE 1 = empleado.IdAeropuerto
       ORDER BY (empleado.Salario) DESC
       LIMIT 1) empleadoAerolinea,
      (SELECT empleado.*
       FROM empleadoAerolinea empleado
-      WHERE 123 = empleado.IdAerolinea
+      WHERE 1 = empleado.IdAerolinea
       ORDER BY (empleado.Salario) DESC
       LIMIT 1) empleadoAeropuerto;
 --Cantidad de aviones activos de una aerolinea
 SELECT COUNT(*)
 FROM Avion aviones
-WHERE aviones.IdAerolinea = 23345
+WHERE aviones.IdAerolinea = 2
   AND aviones.Estado = 'Activo';
 --La suma de los costos que tienen unos aviones que pertenecen hay en un aeropuerto
 SELECT AVG(facturas.Costo)
@@ -52,3 +52,5 @@ SELECT COUNT(*)
 FROM BodegaAvion bodegas
 WHERE bodegas.IdBodega = 1243
   AND bodegas.CurrentlyIn = 1;
+
+

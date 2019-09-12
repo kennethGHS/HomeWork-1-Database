@@ -1,8 +1,8 @@
 import sqlite3
 import json
 import random
-import xlrd
-
+#import xlrd
+import string
 numOfAirports = 30
 numOfAirlines = 8
 
@@ -127,6 +127,51 @@ def choosePuestos(num, key):
                 result.append(random.choice([0, 1, 2, 3]))
         return result
 
+def fillBodega():
+    """
+    inserta datos a tabla Bodega(IdBodega,IdAeropuerto,Nombre)
+    """
+    SecondPart = ["Ruca ","Tapiz", "Joses"," Alfa","Bravo ",
+                  "Beta ","Gama","Epsilon ","Delta ","Xi ","Pi ","Ro ","Sigma"]
+    letras = string.ascii_lowercase
+    for i in range(0, 100):
+        Name = " ".join(random.choice(letras) for i in range(0,1))
+        Name+= SecondPart[random.randrange(0, len(SecondPart))]
+        print(Name)
+        c.execute(f"INSERT INTO Bodega VALUES"
+                  f"({i}, {random.randrange(0,30)}, '{Name}')")
+
+        
+def fillFactura():
+    """
+    inserta datos a tabla Factura(IdFactura,IdAvion,IdTaller,Costo,
+    HoraLlegada,HoraSalida,FechaLLegada,fechaSalida)
+    """
+    letras = string.ascii_lowercase
+    for i in range(0, 100):
+        FechaSal= str(random.randrange(0, 30)) + "/" + str(random.randrange(0, 13))
+        + "/" + str(random.randrange(0, 13))
+        FechaEnt= str(random.randrange(0, 30)) + "/" + str(random.randrange(0, 13))
+        + "/" + str(random.randrange(0, 13))
+        Hora = str(random.randrange(0, 24)) + ":" + str(random.randrange(0, 60))
+        Hora2 = str(random.randrange(0, 24)) + ":" + str(random.randrange(0, 60))
+        c.execute(f"INSERT INTO Bodega VALUES"
+                  f"('{i}', '{random.randrange(0,30)}', '{random.randrange(0,20)}',"
+                  f"'{random.randrange(0,9999999)}','{Hora}','{Hora2}','{FechaEnt}','{FechaSal}')")
+
+def fillTaller():
+    """
+    inserta datos a tabla Taller(IdTaller,IdAeropuerto,Nombre)
+    """
+    SecondPart = ["Ruca ","Tapiz", "Joses"," Alfa","Bravo ",
+                  "Beta ","Gama","Epsilon ","Delta ","Xi ","Pi ","Ro ","Sigma"]
+    letras = string.ascii_lowercase
+    for i in range(0, 100):
+        Name = " ".join(random.choice(letras) for i in range(0,1))
+        Name+= SecondPart[random.randrange(0, len(SecondPart))]
+        print(Name)
+        c.execute(f"INSERT INTO Bodega VALUES"
+                  f"('{i}', '{random.randrange(0,30)}', '{Name}')")
 
 def fillAvion():
     """
@@ -156,10 +201,10 @@ if __name__ == '__main__':
         global idEmpleado
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-
-        # fillAeropuerto()
+        fillBodega()
+        #fillAeropuerto()
         # fillNumTelAeropuerto()
-        # fillAerolinea()
+        #fillAerolinea()
         # fillEmpleadoAerolinea()
         # fillEmpleadoAeropuerto()
 
