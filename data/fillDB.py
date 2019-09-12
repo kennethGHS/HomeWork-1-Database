@@ -1,8 +1,11 @@
 import sqlite3
 import json
 import random
-#import xlrd
+# import xlrd
 import string
+
+import xlrd as xlrd
+
 numOfAirports = 30
 numOfAirlines = 8
 
@@ -127,21 +130,67 @@ def choosePuestos(num, key):
                 result.append(random.choice([0, 1, 2, 3]))
         return result
 
+
 def fillBodega():
     """
     inserta datos a tabla Bodega(IdBodega,IdAeropuerto,Nombre)
     """
-    SecondPart = ["Ruca ","Tapiz", "Joses"," Alfa","Bravo ",
-                  "Beta ","Gama","Epsilon ","Delta ","Xi ","Pi ","Ro ","Sigma"]
+    SecondPart = ["Ruca ", "Tapiz", "Joses", " Alfa", "Bravo ",
+                  "Beta ", "Gama", "Epsilon ", "Delta ", "Xi ", "Pi ", "Ro ", "Sigma"]
     letras = string.ascii_lowercase
     for i in range(0, 100):
-        Name = " ".join(random.choice(letras) for i in range(0,1))
-        Name+= SecondPart[random.randrange(0, len(SecondPart))]
+        Name = " ".join(random.choice(letras) for i in range(0, 1))
+        Name += SecondPart[random.randrange(0, len(SecondPart))]
         print(Name)
         c.execute(f"INSERT INTO Bodega VALUES"
-                  f"({i}, {random.randrange(0,30)}, '{Name}')")
+                  f"({i}, {random.randrange(0, 30)}, '{Name}')")
 
-        
+
+def fillAerolineaAeropuerto():
+    """
+    Realiza las relaciones entre aeropuertos y aerolineas
+    """
+    letras = string.ascii_lowercase
+    for i in range(0, 60):
+        c.execute(f"INSERT INTO AeropuertoAerolinea VALUES"
+                  f"({numOfAirlines}, {numOfAirports})")
+
+
+def fillClasesAvion():
+    """
+        Realiza las relaciones entre aeropuertos y aerolineas
+        """
+    letras = string.ascii_lowercase
+    for i in range(0, 3):
+        palabra = "Turista"
+        if (i == 1):
+            palabra = "Trabajador"
+        if (i == 2):
+            palabra = "Empresario"
+        c.execute(f"INSERT INTO ClasesAvion VALUES"
+                  f"({i}, '{palabra}')")
+
+
+def fillRelClasesAvion():
+    """
+        Realiza las relaciones entre aeropuertos y aerolineas
+        """
+    letras = string.ascii_lowercase
+    for i in range(0, 50):
+        idsClases = ()
+        valor = random.randrange(0, 3)
+        if (valor == 0):
+            idsClases = (0, 1)
+        if (valor == 1):
+            idsClases = (1, 2)
+        else:
+            idsClases = (0, 2)
+        for j in range(0, 2):
+            c.execute(f"INSERT INTO RelClasesAvion VALUES"
+                      f"({idsClases[j]}, '{random.randrange(0,30)}')")
+            
+
+
 def fillFactura():
     """
     inserta datos a tabla Factura(IdFactura,IdAvion,IdTaller,Costo,
@@ -149,29 +198,31 @@ def fillFactura():
     """
     letras = string.ascii_lowercase
     for i in range(0, 100):
-        FechaSal= str(random.randrange(0, 30)) + "/" + str(random.randrange(0, 13))
+        FechaSal = str(random.randrange(0, 30)) + "/" + str(random.randrange(0, 13))
         + "/" + str(random.randrange(0, 13))
-        FechaEnt= str(random.randrange(0, 30)) + "/" + str(random.randrange(0, 13))
+        FechaEnt = str(random.randrange(0, 30)) + "/" + str(random.randrange(0, 13))
         + "/" + str(random.randrange(0, 13))
         Hora = str(random.randrange(0, 24)) + ":" + str(random.randrange(0, 60))
         Hora2 = str(random.randrange(0, 24)) + ":" + str(random.randrange(0, 60))
         c.execute(f"INSERT INTO Bodega VALUES"
-                  f"('{i}', '{random.randrange(0,30)}', '{random.randrange(0,20)}',"
-                  f"'{random.randrange(0,9999999)}','{Hora}','{Hora2}','{FechaEnt}','{FechaSal}')")
+                  f"({i}, {random.randrange(0, 30)}, {random.randrange(0, 20)},"
+                  f"'{random.randrange(0, 9999999)}','{Hora}','{Hora2}','{FechaEnt}','{FechaSal}')")
+
 
 def fillTaller():
     """
     inserta datos a tabla Taller(IdTaller,IdAeropuerto,Nombre)
     """
-    SecondPart = ["Ruca ","Tapiz", "Joses"," Alfa","Bravo ",
-                  "Beta ","Gama","Epsilon ","Delta ","Xi ","Pi ","Ro ","Sigma"]
+    SecondPart = ["Ruca ", "Tapiz", "Joses", " Alfa", "Bravo ",
+                  "Beta ", "Gama", "Epsilon ", "Delta ", "Xi ", "Pi ", "Ro ", "Sigma"]
     letras = string.ascii_lowercase
-    for i in range(0, 100):
-        Name = " ".join(random.choice(letras) for i in range(0,1))
-        Name+= SecondPart[random.randrange(0, len(SecondPart))]
+    for i in range(0, 50):
+        Name = " ".join(random.choice(letras) for i in range(0, 1))
+        Name += SecondPart[random.randrange(0, len(SecondPart))]
         print(Name)
         c.execute(f"INSERT INTO Bodega VALUES"
-                  f"('{i}', '{random.randrange(0,30)}', '{Name}')")
+                  f"('{i}', '{random.randrange(0, 30)}', '{Name}')")
+
 
 def fillAvion():
     """
@@ -201,10 +252,10 @@ if __name__ == '__main__':
         global idEmpleado
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-        fillBodega()
-        #fillAeropuerto()
+        # fillBodega()
+        # fillAeropuerto()
         # fillNumTelAeropuerto()
-        #fillAerolinea()
+        # fillAerolinea()
         # fillEmpleadoAerolinea()
         # fillEmpleadoAeropuerto()
 
