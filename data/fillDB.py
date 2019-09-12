@@ -161,6 +161,7 @@ def fillClasesAvion():
         Realiza las relaciones entre aeropuertos y aerolineas
         """
     letras = string.ascii_lowercase
+
     for i in range(0, 3):
         palabra = "Turista"
         if (i == 1):
@@ -169,6 +170,36 @@ def fillClasesAvion():
             palabra = "Empresario"
         c.execute(f"INSERT INTO ClasesAvion VALUES"
                   f"({i}, '{palabra}')")
+
+
+def fillDamage():
+    """
+        Realiza las relaciones entre aeropuertos y aerolineas
+        """
+    reparaciones =["aceite","motor","turbina","Ala","Asientos","Baño atacasdo"
+    , "Combustible","Llantas"]
+    for i in range(0,100 ):
+        contadorIdDaño=0
+        for j in range(0,random.randrange(1,5)):
+            tipoDano = reparaciones[random.randrange(0,len(reparaciones))]
+            c.execute(f"INSERT INTO Damage VALUES"
+                      f"({contadorIdDaño}, '{tipoDano}',{i})")
+            contadorIdDaño+=1
+
+
+def fillRepuesto():
+    """
+        Realiza las relaciones entre aeropuertos y aerolineas
+        """
+    reparaciones =["Transistor","Llanta","Motor","Rotador","Transmisor",
+                   "Cables", "Combustible","Llantas"]
+    for i in range(0,100 ):
+        contadorIdRepuesto=0
+        for j in range(0,random.randrange(1,5)):
+            tipoRepuesto = reparaciones[random.randrange(0,len(reparaciones))]
+            c.execute(f"INSERT INTO Repuesto VALUES"
+                      f"({contadorIdRepuesto}, '{tipoRepuesto}',{i})")
+            contadorIdRepuesto+=1
 
 
 def fillRelClasesAvion():
@@ -187,8 +218,7 @@ def fillRelClasesAvion():
             idsClases = (0, 2)
         for j in range(0, 2):
             c.execute(f"INSERT INTO RelClasesAvion VALUES"
-                      f"({idsClases[j]}, '{random.randrange(0,30)}')")
-            
+                      f"({idsClases[j]}, '{random.randrange(0, 30)}')")
 
 
 def fillFactura():
@@ -252,7 +282,7 @@ if __name__ == '__main__':
         global idEmpleado
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-        # fillBodega()
+        fillBodega()
         # fillAeropuerto()
         # fillNumTelAeropuerto()
         # fillAerolinea()
