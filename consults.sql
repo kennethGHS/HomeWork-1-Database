@@ -1,5 +1,5 @@
 --Este es el de top 10 aerolineas con mas empleados
-SELECT result.*
+SELECT aero.*
 FROM (SELECT empleado.IdAerolinea
       FROM EmpleadoAerolinea empleado
       GROUP BY empleado.IdAerolinea
@@ -19,31 +19,33 @@ SELECT AVG(empleado.Salario)
 FROM (SELECT aero.IdAeropuerto, COUNT(result.IdAeropuerto) AS cuenta
       FROM EmpleadoAeropuerto result
                INNER JOIN Aeropuerto aero USING (IdAeropuerto)
+        GROUP BY aero.IdAeropuerto
       ORDER BY cuenta DESC
       LIMIT 5
      ) resultado
          INNER JOIN EmpleadoAeropuerto empleado USING (IdAeropuerto)
-GROUP BY resultado.IdAeropuerto;
+GROUP BY empleado.IdAeropuerto
+;
 
 --Empleado mas pagado de aeropuerto y aerolinea
-SELECT empleadoAerolinea.*, empleadoAeropuerto.*
+SELECT empleadoAerolinea.* , empleadoAeropuerto.*
 FROM (SELECT empleado.*
       FROM EmpleadoAeropuerto empleado
       WHERE 1 = empleado.IdAeropuerto
       ORDER BY (empleado.Salario) DESC
-      LIMIT 1) empleadoAerolinea,
+      LIMIT 1) AS empleadoAerolinea,
      (SELECT empleado.*
       FROM empleadoAerolinea empleado
       WHERE 1 = empleado.IdAerolinea
       ORDER BY (empleado.Salario) DESC
-      LIMIT 1) empleadoAeropuerto;
+      LIMIT 1) AS empleadoAeropuerto;
 --Cantidad de aviones activos de una aerolinea
 SELECT COUNT(*)
 FROM Avion aviones
 WHERE aviones.IdAerolinea = 2
-  AND aviones.Estado = 'Activo';
+  AND aviones.Estado = 'activo';
 --La suma de los costos que tienen unos aviones que pertenecen hay en un aeropuerto
-SELECT AVG(facturas.Costo)
+SELECT SUM(facturas.Costo)
 FROM (SELECT talleres.*
       FROM Taller talleres,
            Aeropuerto aeropuertos

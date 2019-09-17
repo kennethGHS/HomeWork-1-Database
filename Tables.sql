@@ -181,9 +181,9 @@ CREATE TABLE IF NOT EXISTS Controlador
 
 CREATE TABLE IF NOT EXISTS Conexion
 (
-    IdConexion    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    IdControlador TEXT    NOT NULL,
-    IdVuelo       TEXT    NOT NULL,
+    IdConexion INTEGER NOT NULL ,
+    IdControlador INTEGER    NOT NULL,
+    IdVuelo       INTEGER    NOT NULL,
     CodigoComun   TEXT    NOT NULL,
     HoraLlegada   TIME    NOT NULL,
     Latitud       INTEGER NOT NULL,
