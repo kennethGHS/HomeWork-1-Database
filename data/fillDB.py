@@ -45,6 +45,15 @@ def fillAerolinea():
         c.execute(f"INSERT INTO Aerolinea VALUES({i}, '{data[i]['iata']}', '{data[i]['name']}')")
 
 
+def fillAeropuertoAerolinea():
+    idAeropuerto = 0
+    while idAeropuerto < numOfAirports:
+        numRandom = random.randrange(3, 9)  # cada aeropuerto tiene entre 3 y 8 Aerolineas
+        for j in range(0, numRandom):
+            c.execute(f"INSERT INTO AeropuertoAerolinea VALUES({j}, {idAeropuerto})")
+        idAeropuerto += 1
+
+
 def addEmpleado(idEmpleado):
     """
     inserta datos a tabla Empleado(IdEmpleado, Codigo, Nombre, Apellido1, Apellido2, Cedula, CuentaBanco, Pais,
@@ -146,14 +155,14 @@ def fillBodega():
                   f"({i}, {random.randrange(0, 30)}, '{Name}')")
 
 
-def fillAerolineaAeropuerto():
-    """
-    Realiza las relaciones entre aeropuertos y aerolineas
-    """
-    letras = string.ascii_lowercase
-    for i in range(0, 60):
-        c.execute(f"INSERT INTO AeropuertoAerolinea VALUES"
-                  f"({numOfAirlines}, {numOfAirports})")
+# def fillAerolineaAeropuerto():
+#     """
+#     Realiza las relaciones entre aeropuertos y aerolineas
+#     """
+#     letras = string.ascii_lowercase
+#     for i in range(0, 60):
+#         c.execute(f"INSERT INTO AeropuertoAerolinea VALUES"
+#                   f"({numOfAirlines}, {numOfAirports})")
 
 
 def fillClasesAvion():
@@ -176,30 +185,30 @@ def fillDamage():
     """
         Realiza las relaciones entre aeropuertos y aerolineas
         """
-    reparaciones =["aceite","motor","turbina","Ala","Asientos","Baño atacasdo"
-    , "Combustible","Llantas"]
-    for i in range(0,100 ):
-        contadorIdDaño=0
-        for j in range(0,random.randrange(1,5)):
-            tipoDano = reparaciones[random.randrange(0,len(reparaciones))]
+    reparaciones = ["aceite", "motor", "turbina", "Ala", "Asientos", "Baño atacasdo"
+        , "Combustible", "Llantas"]
+    for i in range(0, 100):
+        contadorIdDaño = 0
+        for j in range(0, random.randrange(1, 5)):
+            tipoDano = reparaciones[random.randrange(0, len(reparaciones))]
             c.execute(f"INSERT INTO Damage VALUES"
                       f"({contadorIdDaño}, '{tipoDano}',{i})")
-            contadorIdDaño+=1
+            contadorIdDaño += 1
 
 
 def fillRepuesto():
     """
         Realiza las relaciones entre aeropuertos y aerolineas
         """
-    reparaciones =["Transistor","Llanta","Motor","Rotador","Transmisor",
-                   "Cables", "Combustible","Llantas"]
-    for i in range(0,100 ):
-        contadorIdRepuesto=0
-        for j in range(0,random.randrange(1,5)):
-            tipoRepuesto = reparaciones[random.randrange(0,len(reparaciones))]
+    reparaciones = ["Transistor", "Llanta", "Motor", "Rotador", "Transmisor",
+                    "Cables", "Combustible", "Llantas"]
+    for i in range(0, 100):
+        contadorIdRepuesto = 0
+        for j in range(0, random.randrange(1, 5)):
+            tipoRepuesto = reparaciones[random.randrange(0, len(reparaciones))]
             c.execute(f"INSERT INTO Repuesto VALUES"
                       f"({contadorIdRepuesto}, '{tipoRepuesto}',{i})")
-            contadorIdRepuesto+=1
+            contadorIdRepuesto += 1
 
 
 def fillRelClasesAvion():
@@ -254,6 +263,9 @@ def fillTaller():
                   f"('{i}', '{random.randrange(0, 30)}', '{Name}')")
 
 
+avionesInactivos = []
+
+
 def fillAvion():
     """
     sin terminar
@@ -263,17 +275,35 @@ def fillAvion():
     wb = xlrd.open_workbook(loc)
     sheet = wb.sheet_by_index(0)
 
-    print(sheet.cell_value(2, 0))
-
     idAerolinea = 0
     idAvion = 0
+    estados = ['activo', 'activo', 'activo', 'inactivo', 'inactivo', 'reparacion']
     while idAerolinea < numOfAirlines:
-        numRandom = random.randrange(5, 10)  # cada aerolinea tiene entre 5 y 10 aviones
+        numRandom = random.randrange(6, 12)  # cada aerolinea tiene entre 5 y 10 aviones
 
-        # for j in range(0, numRandom):
-        #     c.execute(f"INSERT INTO Avion VALUES({}, {}, {})")
-        #
-        #     idAvion += 1
+        for i in range(0, numRandom):
+            SecondPart = ["Ruca ", "Tapiz", "Joses", " Alfa", "Bravo ",
+                          "Beta ", "Gama", "Epsilon ", "Delta ", "Xi ", "Pi ", "Ro ", "Sigma"]
+            letras = string.ascii_lowercase
+            codigo = " ".join(random.choice(letras) for i in range(0, 1))
+            codigo += SecondPart[random.randrange(0, len(SecondPart))]
+            codigo += str(random.randrange(0, 100))
+
+            if i < 6:
+                estado = estados[i]
+                if estado == 'inactivo': avionesInactivos.append(idAvion)
+                c.execute(f"INSERT INTO Avion VALUES({idAvion}, {idAerolinea}, '{codigo}', "
+                          f"'{sheet.cell_value(idAvion, 0)}', {random.randrange(100, 200)}, {random.randrange(10, 100)},"
+                          f"'{estado}', '{sheet.cell_value(idAvion, 1)}')")
+            else:
+                estado = random.choice(estados)
+                if estado == 'inactivo': avionesInactivos.append(idAvion)
+                c.execute(
+                    f"INSERT INTO Avion VALUES({idAvion}, {idAerolinea}, '{codigo}', "
+                    f"'{sheet.cell_value(idAvion, 0)}', {random.randrange(100, 200)}, {random.randrange(10, 100)},"
+                    f"'{estado}', '{sheet.cell_value(idAvion, 1)}')")
+
+            idAvion += 1
         idAerolinea += 1
 
 
@@ -282,14 +312,19 @@ if __name__ == '__main__':
         global idEmpleado
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-        fillBodega()
+        # fillBodega()
         # fillAeropuerto()
         # fillNumTelAeropuerto()
         # fillAerolinea()
         # fillEmpleadoAerolinea()
         # fillEmpleadoAeropuerto()
 
+        # fillAerolineaAeropuerto()
+        # print(avionesInactivos)
+
         # fillAvion()
+
+        fillAeropuertoAerolinea()
 
         conn.commit()
         c.close()

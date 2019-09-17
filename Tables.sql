@@ -44,11 +44,15 @@ CREATE TABLE IF NOT EXISTS AvionAeropuerto
     FOREIGN KEY (IdAvion) REFERENCES Avion (IdAvion),
     FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto)
 );
+
 CREATE TABLE IF NOT EXISTS AeropuertoAerolinea
 (
     IdAerolinea  INTEGER NOT NULL,
-    IdAeropuerto INTEGER NOT NULL
+    IdAeropuerto INTEGER NOT NULL,
+    FOREIGN KEY (IdAerolinea) REFERENCES Aerolinea (IdAerolinea),
+    FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto)
 );
+
 CREATE TABLE IF NOT EXISTS ClasesAvion
 (
     IdClasesAvion INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -301,5 +305,3 @@ CREATE TABLE IF NOT EXISTS PuestoAerolinea
 -- VALUES (0, 'Piloto'),
 --        (1, 'Azafata'),
 --        (2, 'Copiloto');
-
-SELECT MAX(IdEmpleado) FROM Empleado;
