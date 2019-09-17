@@ -4,23 +4,26 @@ FROM (SELECT empleado.IdAerolinea
       FROM EmpleadoAerolinea empleado
       GROUP BY empleado.IdAerolinea
       ORDER BY COUNT(empleado.IdAerolinea) DESC
-      LIMIT 10) result INNER JOIN  Aerolinea aero USING (IdAerolinea);
+      LIMIT 10) result
+         INNER JOIN Aerolinea aero USING (IdAerolinea);
 --Top 10 aeropuertos con mas aerolineas
 select aero.*
 FROM (SELECT relacion.*
       FROM AeropuertoAerolinea relacion
       GROUP BY relacion.IdAeropuerto
       ORDER BY COUNT(relacion.IdAeropuerto) DESC
-      limit 10) resulta inner join  Aeropuerto aero USING (IdAeropuerto);
+      limit 10) resulta
+         inner join Aeropuerto aero USING (IdAeropuerto);
 --Promedio del salario del los 5 aeropuertos con mas empleados
 SELECT AVG(empleado.Salario)
 FROM (SELECT aero.IdAeropuerto, COUNT(result.IdAeropuerto) AS cuenta
       FROM EmpleadoAeropuerto result
                INNER JOIN Aeropuerto aero USING (IdAeropuerto)
       ORDER BY cuenta DESC
-      LIMIT 1
+      LIMIT 5
      ) resultado
-     INNER JOIN EmpleadoAeropuerto empleado USING (IdAeropuerto);
+         INNER JOIN EmpleadoAeropuerto empleado USING (IdAeropuerto)
+GROUP BY resultado.IdAeropuerto;
 
 --Empleado mas pagado de aeropuerto y aerolinea
 SELECT empleadoAerolinea.*, empleadoAeropuerto.*
@@ -45,7 +48,8 @@ FROM (SELECT talleres.*
       FROM Taller talleres,
            Aeropuerto aeropuertos
       WHERE talleres.IdAeropuerto = 54254
-     ) talleres INNER JOIN
+     ) talleres
+         INNER JOIN
      Factura facturas USING (IdTaller);
 
 SELECT COUNT(*)

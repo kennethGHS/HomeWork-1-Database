@@ -187,8 +187,8 @@ def fillDamage():
         """
     reparaciones = ["aceite", "motor", "turbina", "Ala", "Asientos", "Baño atacasdo"
         , "Combustible", "Llantas"]
+    contadorIdDaño = 0
     for i in range(0, 100):
-        contadorIdDaño = 0
         for j in range(0, random.randrange(1, 5)):
             tipoDano = reparaciones[random.randrange(0, len(reparaciones))]
             c.execute(f"INSERT INTO Damage VALUES"
@@ -202,8 +202,8 @@ def fillRepuesto():
         """
     reparaciones = ["Transistor", "Llanta", "Motor", "Rotador", "Transmisor",
                     "Cables", "Combustible", "Llantas"]
+    contadorIdRepuesto = 0
     for i in range(0, 100):
-        contadorIdRepuesto = 0
         for j in range(0, random.randrange(1, 5)):
             tipoRepuesto = reparaciones[random.randrange(0, len(reparaciones))]
             c.execute(f"INSERT INTO Repuesto VALUES"
@@ -227,7 +227,7 @@ def fillRelClasesAvion():
             idsClases = (0, 2)
         for j in range(0, 2):
             c.execute(f"INSERT INTO RelClasesAvion VALUES"
-                      f"({idsClases[j]}, '{random.randrange(0, 30)}')")
+                      f"({idsClases[j]}, {random.randrange(0, 30)})")
 
 
 def fillFactura():
@@ -235,17 +235,16 @@ def fillFactura():
     inserta datos a tabla Factura(IdFactura,IdAvion,IdTaller,Costo,
     HoraLlegada,HoraSalida,FechaLLegada,fechaSalida)
     """
-    letras = string.ascii_lowercase
     for i in range(0, 100):
-        FechaSal = str(random.randrange(0, 30)) + "/" + str(random.randrange(0, 13))
-        + "/" + str(random.randrange(0, 13))
-        FechaEnt = str(random.randrange(0, 30)) + "/" + str(random.randrange(0, 13))
-        + "/" + str(random.randrange(0, 13))
-        Hora = str(random.randrange(0, 24)) + ":" + str(random.randrange(0, 60))
-        Hora2 = str(random.randrange(0, 24)) + ":" + str(random.randrange(0, 60))
-        c.execute(f"INSERT INTO Bodega VALUES"
+        FechaSal = str(random.randrange(2000, 2030)) + "-" + str(random.randrange(0, 12)) + "-" + str(
+            random.randrange(0, 30))
+        FechaEnt = str(random.randrange(2000, 2030)) + "-" + str(random.randrange(0, 12)) + "-" + str(
+            random.randrange(0, 30))
+        Hora = str(random.randrange(10, 24)) + ":" + str(random.randrange(10, 60))
+        Hora2 = str(random.randrange(10, 24)) + ":" + str(random.randrange(10, 60))
+        c.execute(f"INSERT INTO Factura VALUES"
                   f"({i}, {random.randrange(0, 30)}, {random.randrange(0, 20)},"
-                  f"'{random.randrange(0, 9999999)}','{Hora}','{Hora2}','{FechaEnt}','{FechaSal}')")
+                  f"{random.randrange(0, 9999999)},'{Hora}','{Hora2}','{FechaEnt}','{FechaSal}')")
 
 
 def fillTaller():
@@ -259,8 +258,8 @@ def fillTaller():
         Name = " ".join(random.choice(letras) for i in range(0, 1))
         Name += SecondPart[random.randrange(0, len(SecondPart))]
         print(Name)
-        c.execute(f"INSERT INTO Bodega VALUES"
-                  f"('{i}', '{random.randrange(0, 30)}', '{Name}')")
+        c.execute(f"INSERT INTO Taller VALUES"
+                  f"({i}, {random.randrange(0, 30)}, '{Name}')")
 
 
 avionesInactivos = []
@@ -307,25 +306,49 @@ def fillAvion():
         idAerolinea += 1
 
 
+def FillBodegaAvion():
+    """
+    inserta datos a tabla BodegaAvion
+    """
+    for i in range(0, 100):
+        c.execute(f"INSERT INTO BodegaAvion VALUES"
+                  f"({i}, {avionesInactivos[random.randrange(0, len(avionesInactivos))]},{random.uniform(0, 1)})")
+
+
+def fillControlador():
+    Nombres = ["Juan", "Ken", "Maria", "Juana", "Marco", "Jason", "Mario", "Luigi",
+               "Somedude", "Wikitaker", "PrograVisor", "Valeria", "Randy", "Chelsey",
+               "Sidney", "Jesus", "Belcebu", "Ana"]
+    Apellidos = ["Hernandez", "Gutierres", "Santa", "Vargas", "Herrera",
+                 "Dittel", "Guzman", "Renhberg", "Italy", "Vitaly", "Castro", "Mora",
+                 "Walker", "Wanker", "Salvador", "Tortilla"]
+    for i in range(1,30):
+        c.execute(f"INSERT INTO Controlador VALUES"
+                  f"({i}, '{Nombres[random.randrange(0, len(Nombres))]}','{Apellidos[random.randrange(0, len(Apellidos))]}','{random.randrange(0,1937265)}')")
+
+
 if __name__ == '__main__':
     try:
         global idEmpleado
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-        # fillBodega()
-        # fillAeropuerto()
-        # fillNumTelAeropuerto()
-        # fillAerolinea()
-        # fillEmpleadoAerolinea()
-        # fillEmpleadoAeropuerto()
 
-        # fillAerolineaAeropuerto()
-        # print(avionesInactivos)
+        fillAeropuerto()
+        fillNumTelAeropuerto()
+        fillAerolinea()
+        fillEmpleadoAerolinea()
+        fillEmpleadoAeropuerto()
 
-        # fillAvion()
+    #    fillAerolineaAeropuerto()
+      #  print(avionesInactivos)
+
+        fillAvion()
 
         fillAeropuertoAerolinea()
-
+        fillControlador()
+        fillRepuesto()
+        fillFactura()
+        fillBodega()
         conn.commit()
         c.close()
         conn.close()
