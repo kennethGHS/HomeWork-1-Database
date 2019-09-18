@@ -334,7 +334,7 @@ def fillConexion():
 if __name__ == '__main__':
     try:
         global idEmpleado
-        conn = sqlite3.connect('C:\Work\DabaseHomework1\HomeWork-1-Database\database.db')
+        conn = sqlite3.connect('database.db')
         c = conn.cursor()
         # fillFactura()
         fillTaller()
