@@ -325,30 +325,37 @@ def fillControlador():
     for i in range(1,30):
         c.execute(f"INSERT INTO Controlador VALUES"
                   f"({i}, '{Nombres[random.randrange(0, len(Nombres))]}','{Apellidos[random.randrange(0, len(Apellidos))]}','{random.randrange(0,1937265)}')")
-
+def fillConexion():
+    for i in range(0,30):
+        Hora = str(random.randrange(10, 24)) + ":" + str(random.randrange(10, 60))
+        c.execute(f"INSERT INTO Conexion VALUES"
+                  f"({i}, {i},{i},'{random.randrange(0, 1937265)}','{Hora}',{random.randrange(0,200)},{random.randrange(0,200)})")
 
 if __name__ == '__main__':
     try:
         global idEmpleado
-        conn = sqlite3.connect('database.db')
+        conn = sqlite3.connect('C:\Work\DabaseHomework1\HomeWork-1-Database\database.db')
         c = conn.cursor()
-
-        fillAeropuerto()
-        fillNumTelAeropuerto()
-        fillAerolinea()
-        fillEmpleadoAerolinea()
-        fillEmpleadoAeropuerto()
+        # fillFactura()
+        fillTaller()
+        # fillControlador()
+        # fillConexion()
+        # fillAeropuerto()
+        # fillNumTelAeropuerto()
+        # fillAerolinea()
+        # fillEmpleadoAerolinea()
+        # fillEmpleadoAeropuerto()
 
     #    fillAerolineaAeropuerto()
       #  print(avionesInactivos)
 
-        fillAvion()
+        # fillAvion()
 
-        fillAeropuertoAerolinea()
-        fillControlador()
-        fillRepuesto()
-        fillFactura()
-        fillBodega()
+        # fillAeropuertoAerolinea()
+        # fillControlador()
+        # fillRepuesto()
+        # fillFactura()
+        # fillBodega()
         conn.commit()
         c.close()
         conn.close()

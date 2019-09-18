@@ -1,9 +1,9 @@
 --Este es el de top 10 aerolineas con mas empleados
 SELECT aero.*
-FROM (SELECT empleado.IdAerolinea
+FROM (SELECT empleado.IdAerolinea,COUNT(empleado.IdAerolinea) CUENTA
       FROM EmpleadoAerolinea empleado
       GROUP BY empleado.IdAerolinea
-      ORDER BY COUNT(empleado.IdAerolinea) DESC
+      ORDER BY CUENTA DESC
       LIMIT 10) result
          INNER JOIN Aerolinea aero USING (IdAerolinea);
 --Top 10 aeropuertos con mas aerolineas
@@ -44,16 +44,16 @@ SELECT COUNT(*)
 FROM Avion aviones
 WHERE aviones.IdAerolinea = 2
   AND aviones.Estado = 'activo';
---La suma de los costos que tienen unos aviones que pertenecen hay en un aeropuerto
+--La suma de los costos que tienen unos aviones que pertenecen  en un aeropuerto
 SELECT SUM(facturas.Costo)
 FROM (SELECT talleres.*
       FROM Taller talleres,
            Aeropuerto aeropuertos
-      WHERE talleres.IdAeropuerto = 54254
+      WHERE talleres.IdAeropuerto = 4
      ) talleres
          INNER JOIN
      Factura facturas USING (IdTaller);
-
+select * from Controlador;
 SELECT COUNT(*)
 FROM BodegaAvion bodegas
 WHERE bodegas.IdBodega = 1243
