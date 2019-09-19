@@ -1,5 +1,5 @@
-Como lo dice su nombre este repositorio contiene la primera tarea de abses de datos, la cual consiste en una base de datos simple
-en la cual se contienen los diferentes datos de una rede de aeropuertos y de aerolineas, esto con el objetivo de familiariazarnos
+Como lo dice su nombre este repositorio contiene la primera tarea de bases de datos, la cual consiste en una base de datos simple
+en la cual se contienen los diferentes datos de una red de aeropuertos y de aerolineas, esto con el objetivo de familiariazarnos
 con lo que son las bases de datos y las consultas.
 A continuacion se puede apreciar el diagrama de la base de datos obtenido a partir de de DataGrip:
 ![alt text](https://github.com/kennethGHS/HomeWork-1-Database/blob/master/Pictures/DiragaramaDatagrip.png)
