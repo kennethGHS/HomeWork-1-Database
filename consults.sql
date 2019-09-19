@@ -15,7 +15,7 @@ FROM (SELECT relacion.*
       limit 10) resulta
          inner join Aeropuerto aero USING (IdAeropuerto);
 --Promedio del salario del los 5 aeropuertos con mas empleados
-SELECT AVG(empleado.Salario)
+SELECT AVG(empleado.Salario) AS 'Promedio salario top 5 aeropuertos'
 FROM (SELECT aero.IdAeropuerto, COUNT(result.IdAeropuerto) AS cuenta
       FROM EmpleadoAeropuerto result
                INNER JOIN Aeropuerto aero USING (IdAeropuerto)
@@ -28,7 +28,7 @@ GROUP BY empleado.IdAeropuerto
 ;
 
 --Empleado mas pagado de aeropuerto y aerolinea
-SELECT empleadoAerolinea.* , empleadoAeropuerto.*
+SELECT empleadoAerolinea.*  , empleadoAeropuerto.*
 FROM (SELECT empleado.*
       FROM EmpleadoAeropuerto empleado
       WHERE 1 = empleado.IdAeropuerto
@@ -40,12 +40,12 @@ FROM (SELECT empleado.*
       ORDER BY (empleado.Salario) DESC
       LIMIT 1) AS empleadoAeropuerto;
 --Cantidad de aviones activos de una aerolinea
-SELECT COUNT(*)
+SELECT COUNT(*) AS 'Cantidad de aviones activos en Aerolinea'
 FROM Avion aviones
 WHERE aviones.IdAerolinea = 2
   AND aviones.Estado = 'activo';
 --La suma de los costos que tienen unos aviones que pertenecen  en un aeropuerto
-SELECT SUM(facturas.Costo)
+SELECT SUM(facturas.Costo) AS 'Costo reparaciones en aeropuerto'
 FROM (SELECT talleres.*
       FROM Taller talleres,
            Aeropuerto aeropuertos
