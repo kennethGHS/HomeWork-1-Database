@@ -1,6 +1,6 @@
 --Este es el de top 10 aerolineas con mas empleados
 SELECT aero.*
-FROM (SELECT empleado.IdAerolinea,COUNT(empleado.IdAerolinea) CUENTA
+FROM (SELECT empleado.IdAerolinea, COUNT(empleado.IdAerolinea) CUENTA
       FROM EmpleadoAerolinea empleado
       GROUP BY empleado.IdAerolinea
       ORDER BY CUENTA DESC
@@ -19,7 +19,7 @@ SELECT AVG(empleado.Salario) AS 'Promedio salario top 5 aeropuertos'
 FROM (SELECT aero.IdAeropuerto, COUNT(result.IdAeropuerto) AS cuenta
       FROM EmpleadoAeropuerto result
                INNER JOIN Aeropuerto aero USING (IdAeropuerto)
-        GROUP BY aero.IdAeropuerto
+      GROUP BY aero.IdAeropuerto
       ORDER BY cuenta DESC
       LIMIT 5
      ) resultado
@@ -28,7 +28,7 @@ GROUP BY empleado.IdAeropuerto
 ;
 
 --Empleado mas pagado de aeropuerto y aerolinea
-SELECT empleadoAerolinea.*  , empleadoAeropuerto.*
+SELECT empleadoAerolinea.*, empleadoAeropuerto.*
 FROM (SELECT empleado.*
       FROM EmpleadoAeropuerto empleado
       WHERE 1 = empleado.IdAeropuerto
@@ -39,7 +39,23 @@ FROM (SELECT empleado.*
       WHERE 1 = empleado.IdAerolinea
       ORDER BY (empleado.Salario) DESC
       LIMIT 1) AS empleadoAeropuerto;
+--Empleado mas pagado de todos
+SELECT empleadoAerolinea.*, empleadoAeropuerto.*
+FROM (SELECT trabajador.*, E.*
+      FROM EmpleadoAeropuerto trabajador
+               INNER JOIN Empleado E on trabajador.IdEmpleado = E.IdEmpleado
+      ORDER BY trabajador.Salario
+      LIMIT 1
+     ) AS empleadoAeropuerto,
+     (SELECT  trabajador2.*, E2.*
+         FROM EmpleadoAerolinea trabajador2
+         INNER JOIN  Empleado E2 on trabajador2.IdEmpleado = E2.IdEmpleado
+         ORDER BY trabajador2.Salario
+         LIMIT 1
+         ) AS empleadoAerolinea;
+
 --Cantidad de aviones activos de una aerolinea
+
 SELECT COUNT(*) AS 'Cantidad de aviones activos en Aerolinea'
 FROM Avion aviones
 WHERE aviones.IdAerolinea = 2
@@ -53,8 +69,8 @@ FROM (SELECT talleres.*
      ) talleres
          INNER JOIN
      Factura facturas USING (IdTaller);
-select * from Controlador;
-SELECT COUNT(*)
+--Cuenta la cantidad de aviones dentro de una bodega
+SELECT count(*)
 FROM BodegaAvion bodegas
-WHERE bodegas.IdBodega = 1243
-  AND bodegas.Dentro = TRUE;
+WHERE bodegas.IdBodega = 25
+  AND bodegas.Dentro = 'True';
