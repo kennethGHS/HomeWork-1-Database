@@ -17,7 +17,7 @@ def fillAeropuerto():
     """
     inserta datos a tabla Aeropuerto(IdAeropuerto, Codigo, Nombre, Pais, Ciudad, Horario)
     """
-    with open('data/Aeropuertos.json', 'r') as f:
+    with open('Aeropuertos.json', 'r') as f:
         data = json.load(f)
     for i in range(0, numOfAirports):
         c.execute(f"INSERT INTO Aeropuerto VALUES"
@@ -44,7 +44,7 @@ def fillNumTelAeropuerto():
 Crea una cantidad determinada de aerolineas con sus datos unicos
 """
 def fillAerolinea():
-    with open('data/Aerolineas.json', 'r') as f:
+    with open('Aerolineas.json', 'r') as f:
         data = json.load(f)
     for i in range(0, numOfAirlines):
         c.execute(f"INSERT INTO Aerolinea VALUES({i}, '{data[i]['iata']}', '{data[i]['name']}')")
@@ -67,7 +67,7 @@ def addEmpleado(idEmpleado):
     inserta datos a tabla Empleado(IdEmpleado, Codigo, Nombre, Apellido1, Apellido2, Cedula, CuentaBanco, Pais,
                                    Ciudad, Calle, Casa, Horario)
     """
-    with open('data/Empleado.json', 'r') as f:
+    with open('Empleado.json', 'r') as f:
         dataEmpleado = json.load(f)
 
     c.execute(
@@ -162,14 +162,6 @@ def fillBodega():
                   f"({i}, {random.randrange(0, 30)}, '{Name}')")
 
 
-# def fillAerolineaAeropuerto():
-#     """
-#     Realiza las relaciones entre aeropuertos y aerolineas
-#     """
-#     letras = string.ascii_lowercase
-#     for i in range(0, 60):
-#         c.execute(f"INSERT INTO AeropuertoAerolinea VALUES"
-#                   f"({numOfAirlines}, {numOfAirports})")
 
 
 def fillClasesAvion():
@@ -474,7 +466,7 @@ def fillVuelo():
 if __name__ == '__main__':
     try:
         global idEmpleado
-        conn = sqlite3.connect('C:\Work\DabaseHomework1\HomeWork-1-Database\database.db')
+        conn = sqlite3.connect('database.db')
         c = conn.cursor()
         fillAvionFacturaBodega()
         fillVuelo()
