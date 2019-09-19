@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS AvionAeropuerto
     IdAvion      INTEGER NOT NULL,
     IdAeropuerto INTEGER NOT NULL,
     Dentro       BOOLEAN NOT NULL,
+    HoraLlegada  TIME    NOT NULL,
     FOREIGN KEY (IdAvion) REFERENCES Avion (IdAvion),
     FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto)
 );
@@ -83,9 +84,9 @@ CREATE TABLE IF NOT EXISTS Bodega
 );
 CREATE TABLE IF NOT EXISTS BodegaAvion
 (
-    IdBodega    INTEGER NOT NULL,
-    IdAvion     INTEGER NOT NULL,
-    CurrentlyIn BOOLEAN NOT NULL,
+    IdBodega INTEGER NOT NULL,
+    IdAvion  INTEGER NOT NULL,
+    Dentro   BOOLEAN NOT NULL,
     FOREIGN KEY (IdBodega) REFERENCES Bodega (IdBodega),
     FOREIGN KEY (IdAvion) REFERENCES Avion (IdAvion)
 );
@@ -122,9 +123,8 @@ CREATE TABLE IF NOT EXISTS Repuesto
 CREATE TABLE IF NOT EXISTS Vuelo
 (
     IdVuelo      INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    IdAeropuerto INTEGER NOT NULL,
-    IdAerolinea  INTEGER NOT NULL,
     IdAvion      INTEGER NOT NULL,
+    IdEstado    INTEGER NOT NULL ,
     Destino      TEXT    NOT NULL,
     Origen       TEXT    NOT NULL,
     NumeroVuelo  TEXT    NOT NULL,
@@ -133,23 +133,28 @@ CREATE TABLE IF NOT EXISTS Vuelo
     HoraSalida   TIME    NOT NULL,
     HoraLlegada  TIME    NOT NULL,
     Precio       DOUBLE  NOT NULL,
-    Estado       TEXT    NOT NULL,
-    FOREIGN KEY (IdAeropuerto) REFERENCES Aeropuerto (IdAeropuerto),
-    FOREIGN KEY (IdAerolinea) REFERENCES Aerolinea (IdAerolinea),
-    FOREIGN KEY (IdAvion) REFERENCES Avion (IdAvion)
+    FOREIGN KEY (IdAvion) REFERENCES Avion (IdAvion),
+    FOREIGN KEY (IdEstado) REFERENCES EstadoVuelo(IdEstado)
+);
 
+CREATE TABLE IF NOT EXISTS EstadoVuelo
+(
+    IdEstado INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,
+    Nombre TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Pasajero
 (
-    IdPasajero     INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    IdVuelo        INTEGER NOT NULL,
-    CodigoPasajero TEXT    NOT NULL,
-    Nombre         TEXT    NOT NULL,
-    Apellido1      TEXT    NOT NULL,
-    Apellido2      TEXT    NOT NULL,
-    NumPasaporte   TIME    NOT NULL,
-    PaisPasaporte  TEXT    NOT NULL,
+    IdPasajero      INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    IdVuelo         INTEGER NOT NULL,
+    CodigoPasajero  TEXT    NOT NULL,
+    Nombre          TEXT    NOT NULL,
+    Apellido1       TEXT    NOT NULL,
+    Apellido2       TEXT    NOT NULL,
+    NumPasaporte    TEXT    NOT NULL,
+    PaisPasaporte   TEXT    NOT NULL,
+    FechaImprenta   DATE    NOT NULL,
+    FechaNacimiento DATE    NOT NULL,
     FOREIGN KEY (IdVuelo) REFERENCES Vuelo (IdVuelo)
 
 );
@@ -164,10 +169,9 @@ CREATE TABLE IF NOT EXISTS NumTelPasajero
 
 CREATE TABLE IF NOT EXISTS Equipaje
 (
-    IdEquipaje     INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    Peso           DOUBLE  NOT NULL,
-    CodigoPasajero TEXT    NOT NULL,
-    IdPasajero     INTEGER NOT NULL,
+    IdEquipaje INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Peso       DOUBLE  NOT NULL,
+    IdPasajero INTEGER NOT NULL,
     FOREIGN KEY (IdPasajero) REFERENCES Pasajero (IdPasajero)
 );
 
@@ -181,9 +185,9 @@ CREATE TABLE IF NOT EXISTS Controlador
 
 CREATE TABLE IF NOT EXISTS Conexion
 (
-    IdConexion INTEGER NOT NULL ,
-    IdControlador INTEGER    NOT NULL,
-    IdVuelo       INTEGER    NOT NULL,
+    IdConexion    INTEGER NOT NULL,
+    IdControlador INTEGER NOT NULL,
+    IdVuelo       INTEGER NOT NULL,
     CodigoComun   TEXT    NOT NULL,
     HoraLlegada   TIME    NOT NULL,
     Latitud       INTEGER NOT NULL,

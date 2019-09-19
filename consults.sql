@@ -57,4 +57,4 @@ select * from Controlador;
 SELECT COUNT(*)
 FROM BodegaAvion bodegas
 WHERE bodegas.IdBodega = 1243
-  AND bodegas.CurrentlyIn = 1;
+  AND bodegas.Dentro = TRUE;

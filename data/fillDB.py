@@ -306,13 +306,14 @@ def fillAvion():
         idAerolinea += 1
 
 
-def FillBodegaAvion():
+def fillBodegaAvion():
     """
     inserta datos a tabla BodegaAvion
     """
+    estados = [True, False]
     for i in range(0, 100):
         c.execute(f"INSERT INTO BodegaAvion VALUES"
-                  f"({i}, {avionesInactivos[random.randrange(0, len(avionesInactivos))]},{random.uniform(0, 1)})")
+                  f"({i}, {random.randrange(0, 68)},'{estados[random.randrange(0, 2)]}')")
 
 
 def fillControlador():
@@ -322,43 +323,132 @@ def fillControlador():
     Apellidos = ["Hernandez", "Gutierres", "Santa", "Vargas", "Herrera",
                  "Dittel", "Guzman", "Renhberg", "Italy", "Vitaly", "Castro", "Mora",
                  "Walker", "Wanker", "Salvador", "Tortilla"]
-    for i in range(1,30):
+    for i in range(0, 30):
         c.execute(f"INSERT INTO Controlador VALUES"
-                  f"({i}, '{Nombres[random.randrange(0, len(Nombres))]}','{Apellidos[random.randrange(0, len(Apellidos))]}','{random.randrange(0,1937265)}')")
+                  f"({i}, '{Nombres[random.randrange(0, len(Nombres))]}','{Apellidos[random.randrange(0, len(Apellidos))]}','{random.randrange(0, 1937265)}')")
+
+
 def fillConexion():
-    for i in range(0,30):
+    for i in range(0, 30):
         Hora = str(random.randrange(10, 24)) + ":" + str(random.randrange(10, 60))
         c.execute(f"INSERT INTO Conexion VALUES"
-                  f"({i}, {i},{i},'{random.randrange(0, 1937265)}','{Hora}',{random.randrange(0,200)},{random.randrange(0,200)})")
+                  f"({i}, {i},{i},'{random.randrange(0, 1937265)}','{Hora}',{random.randrange(0, 200)},{random.randrange(0, 200)})")
+
+
+def fillAvionAeropuerto():
+    minutos = [15, 20, 25, 30, 35]
+    horas = [10, 11, 12, 13, 14, 15, 16]
+    estados = [True, False]
+    for i in range(0, 68):
+        hora = str(horas[random.randrange(0, len(horas))]) + ":" + str(minutos[random.randrange(0, len(minutos))])
+        c.execute(f"INSERT INTO AvionAeropuerto VALUES"
+                  f"({i}, {random.randrange(0, 30)},'{estados[random.randrange(0, 2)]}','{hora}')")
+
+
+def fillpasajero():
+    Nombres = ["Juan", "Ken", "Maria", "Juana", "Marco", "Jason", "Mario", "Luigi",
+               "Somedude", "Wikitaker", "PrograVisor", "Valeria", "Randy", "Chelsey",
+               "Sidney", "Jesus", "Belcebu", "Ana"]
+    Apellidos = ["Hernandez", "Gutierres", "Santa", "Vargas", "Herrera",
+                 "Dittel", "Guzman", "Renhberg", "Italy", "Vitaly", "Castro", "Mora",
+                 "Walker", "Wanker", "Salvador", "Tortilla"]
+    paises = ["Costa Rica", "Marruecos", "Rusia", "USA", "Kenia", "Laos", "Chad",
+              "Ukrania", "Italia", "Reino Unido", "Francia", "Alemania", "Saudi",
+              "Norte Africa", "Venezuela", "brazil", "Chile", "Argentina"]
+
+    for i in range(0, 300):
+        FechaImprenta = str(random.randrange(2010, 2020)) + "-" + str(random.randrange(0, 12)) + "-" + str(
+            random.randrange(0, 30))
+        FechaNac = str(random.randrange(1900, 2020)) + "-" + str(random.randrange(0, 12)) + "-" + str(
+            random.randrange(0, 30))
+        c.execute(f"INSERT INTO Pasajero VALUES"
+                  f"({i}, {random.randrange(0, 68)},'{random.randrange(10000, 99999)}',"
+                  f"'{Nombres[random.randrange(0, len(Nombres))]}','{Apellidos[random.randrange(0, len(Apellidos))]}',"
+                  f"'{Apellidos[random.randrange(0, len(Apellidos))]}','{random.randrange(10000, 99999)}',"
+                  f"'{paises[random.randrange(0, len(paises))]}','{FechaImprenta}','{FechaNac}')")
+
+
+def fillEquipaje():
+    for i in range(0, 300):
+        c.execute(f"INSERT INTO Equipaje VALUES"
+                  f"({i}, {random.randrange(0, 5)},{i})")
+    for j in range(0, 100):
+        c.execute(f"INSERT INTO Equipaje VALUES"
+                  f"({j + 300}, {random.randrange(0, 5)},{random.randrange(0, 300)})")
+
+
+def fillNumPasajero():
+    for i in range(0, 300):
+        c.execute(f"INSERT INTO NumTelPasajero VALUES"
+                  f"({i}, {i},{random.randrange(10000000, 99999999)})")
+    for j in range(0, 200):
+        c.execute(f"INSERT INTO NumTelPasajero VALUES"
+                  f"({j + 300}, {random.randrange(0, 300)},{random.randrange(10000000, 99999999)})")
+
+
+def fillEstadoVuelo():
+    enCurso = "en Curso"
+    enEspera = "En espera"
+    c.execute(f"INSERT INTO EstadoVuelo VALUES"
+              f"({0}, '{enCurso}')")
+    c.execute(f"INSERT INTO EstadoVuelo VALUES"
+              f"({1}, '{enEspera}')")
+
+
+def fillVuelo():
+    paises = ["Costa Rica", "Marruecos", "Rusia", "USA", "Kenia", "Laos", "Chad",
+              "Ukrania", "Italia", "Reino Unido", "Francia", "Alemania", "Saudi",
+              "Norte Africa", "Venezuela", "brazil", "Chile", "Argentina"]
+    for i in range(0, 68):
+        FechaSal = str(random.randrange(2000, 2030)) + "-" + str(random.randrange(0, 12)) + "-" + str(
+            random.randrange(0, 30))
+        FechaLlegada= str(random.randrange(2000, 2030)) + "-" + str(random.randrange(0, 12)) + "-" + str(
+            random.randrange(0, 30))
+        Hora = str(random.randrange(10, 24)) + ":" + str(random.randrange(10, 60))
+        Hora2 = str(random.randrange(10, 24)) + ":" + str(random.randrange(10, 60))
+        c.execute(f"INSERT INTO Vuelo VALUES"
+                  f"({i}, {i},'{random.randrange(0,2)}',"
+                  f"'{paises[random.randrange(0, len(paises))]}','{paises[random.randrange(0, len(paises))]}',"
+                  f"'{random.randrange(1000,5000)}','{FechaSal}','{FechaLlegada}',"
+                  f"'{Hora}','{Hora2}',{random.randrange(100,300)})")
+
 
 if __name__ == '__main__':
-    try:
-        global idEmpleado
-        conn = sqlite3.connect('database.db')
-        c = conn.cursor()
-        # fillFactura()
-        fillTaller()
-        # fillControlador()
-        # fillConexion()
-        # fillAeropuerto()
-        # fillNumTelAeropuerto()
-        # fillAerolinea()
-        # fillEmpleadoAerolinea()
-        # fillEmpleadoAeropuerto()
-
+    # try:
+    global idEmpleado
+    conn = sqlite3.connect('C:\Work\DabaseHomework1\HomeWork-1-Database\database.db')
+    c = conn.cursor()
+    fillVuelo()
+    # fillNumPasajero()
+    # fillEstadoVuelo()
+    # fillEquipaje()
+    # fillpasajero()
+    # fillFactura()
+    # fillBodegaAvion()
+    # fillRelClasesAvion()
+    # fillClasesAvion()
+    # fillRepuesto()
+    # fillDamage()
+    # fillAvionAeropuerto()
+    # fillTaller()
+    # fillControlador()
+    # fillConexion()
+    # fillAeropuerto()
+    # fillNumTelAeropuerto()
+    # fillAerolinea()
+    # fillEmpleadoAerolinea()
+    # fillEmpleadoAeropuerto()
     #    fillAerolineaAeropuerto()
-      #  print(avionesInactivos)
+    #  print(avionesInactivos)
+    # fillAvion()
+    # fillAeropuertoAerolinea()
+    # fillControlador()
+    # fillRepuesto()
+    # fillFactura()
+    # fillBodega()
+    conn.commit()
+    c.close()
+    conn.close()
 
-        # fillAvion()
-
-        # fillAeropuertoAerolinea()
-        # fillControlador()
-        # fillRepuesto()
-        # fillFactura()
-        # fillBodega()
-        conn.commit()
-        c.close()
-        conn.close()
-
-    except Exception as e:
-        print("ERROR: " + str(e))
+# except Exception as e:
+#     print("ERROR: " + str(e))
