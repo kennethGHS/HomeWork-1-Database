@@ -97,9 +97,9 @@ CREATE TABLE IF NOT EXISTS Factura
     IdTaller     INTEGER NOT NULL,
     Costo        DOUBLE  NOT NULL,
     HoraLlegada  TEXT    NOT NULL,
-    HoraSalida   TEXT    NOT NULL,
+    HoraSalida   TEXT,
     FechaLlegada TEXT    NOT NULL,
-    FechaSalida  TEXT    NOT NULL,
+    FechaSalida  TEXT,
     FOREIGN KEY (IdAvion) REFERENCES Avion (IdAvion),
     FOREIGN KEY (IdTaller) REFERENCES Taller (IdTaller)
 );
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS Vuelo
 (
     IdVuelo      INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     IdAvion      INTEGER NOT NULL,
-    IdEstado    INTEGER NOT NULL ,
+    IdEstado     INTEGER NOT NULL,
     Destino      TEXT    NOT NULL,
     Origen       TEXT    NOT NULL,
     NumeroVuelo  TEXT    NOT NULL,
@@ -134,13 +134,13 @@ CREATE TABLE IF NOT EXISTS Vuelo
     HoraLlegada  TIME    NOT NULL,
     Precio       DOUBLE  NOT NULL,
     FOREIGN KEY (IdAvion) REFERENCES Avion (IdAvion),
-    FOREIGN KEY (IdEstado) REFERENCES EstadoVuelo(IdEstado)
+    FOREIGN KEY (IdEstado) REFERENCES EstadoVuelo (IdEstado)
 );
 
 CREATE TABLE IF NOT EXISTS EstadoVuelo
 (
-    IdEstado INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,
-    Nombre TEXT NOT NULL
+    IdEstado INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Nombre   TEXT    NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Pasajero

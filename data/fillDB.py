@@ -9,6 +9,9 @@ import xlrd as xlrd
 numOfAirports = 30
 numOfAirlines = 8
 
+avionesInactivos = []
+avionesReparacion = []
+
 
 def fillAeropuerto():
     """
@@ -37,14 +40,19 @@ def fillNumTelAeropuerto():
             idNumTelAeropuerto += 1
         idAeropuerto += 1
 
-
+"""
+Crea una cantidad determinada de aerolineas con sus datos unicos
+"""
 def fillAerolinea():
     with open('data/Aerolineas.json', 'r') as f:
         data = json.load(f)
     for i in range(0, numOfAirlines):
         c.execute(f"INSERT INTO Aerolinea VALUES({i}, '{data[i]['iata']}', '{data[i]['name']}')")
 
-
+"""
+Esta funcion rellena la tabla que realiza la relacion entre aerolineas
+y aeropuertos
+"""
 def fillAeropuertoAerolinea():
     idAeropuerto = 0
     while idAeropuerto < numOfAirports:
@@ -150,7 +158,6 @@ def fillBodega():
     for i in range(0, 100):
         Name = " ".join(random.choice(letras) for i in range(0, 1))
         Name += SecondPart[random.randrange(0, len(SecondPart))]
-        print(Name)
         c.execute(f"INSERT INTO Bodega VALUES"
                   f"({i}, {random.randrange(0, 30)}, '{Name}')")
 
@@ -167,7 +174,7 @@ def fillBodega():
 
 def fillClasesAvion():
     """
-        Realiza las relaciones entre aeropuertos y aerolineas
+        Crea las 3 clases de avion disponibles
         """
     letras = string.ascii_lowercase
 
@@ -183,7 +190,7 @@ def fillClasesAvion():
 
 def fillDamage():
     """
-        Realiza las relaciones entre aeropuertos y aerolineas
+        Realiza una cantidad de damages y los  RELACIONA CON una factura
         """
     reparaciones = ["aceite", "motor", "turbina", "Ala", "Asientos", "Baño atacasdo"
         , "Combustible", "Llantas"]
@@ -198,7 +205,8 @@ def fillDamage():
 
 def fillRepuesto():
     """
-        Realiza las relaciones entre aeropuertos y aerolineas
+        Crea una cantida aleatoria de repuestos y los relaciona com\
+        una factura
         """
     reparaciones = ["Transistor", "Llanta", "Motor", "Rotador", "Transmisor",
                     "Cables", "Combustible", "Llantas"]
@@ -235,7 +243,14 @@ def fillFactura():
     inserta datos a tabla Factura(IdFactura,IdAvion,IdTaller,Costo,
     HoraLlegada,HoraSalida,FechaLLegada,fechaSalida)
     """
-    for i in range(0, 100):
+    for j in range(0, len(avionesReparacion)):
+        FechaEnt = str(random.randrange(2000, 2030)) + "-" + str(random.randrange(0, 12)) + "-" + str(
+            random.randrange(0, 30))
+        Hora = str(random.randrange(10, 24)) + ":" + str(random.randrange(10, 60))
+        c.execute(f"INSERT INTO Factura VALUES"
+                  f"({j}, {random.randrange(0, 30)}, {random.randrange(0, 20)},"
+                  f"{random.randrange(0, 9999999)},'{Hora}','{None}','{FechaEnt}','{None}')")
+    for i in range(len(avionesReparacion), 100):
         FechaSal = str(random.randrange(2000, 2030)) + "-" + str(random.randrange(0, 12)) + "-" + str(
             random.randrange(0, 30))
         FechaEnt = str(random.randrange(2000, 2030)) + "-" + str(random.randrange(0, 12)) + "-" + str(
@@ -245,6 +260,15 @@ def fillFactura():
         c.execute(f"INSERT INTO Factura VALUES"
                   f"({i}, {random.randrange(0, 30)}, {random.randrange(0, 20)},"
                   f"{random.randrange(0, 9999999)},'{Hora}','{Hora2}','{FechaEnt}','{FechaSal}')")
+
+"""
+Esta funcion lo que realiza es el llamar las funciones de rellenar aviones y relaciones de bodegas junto a la factura
+esto para hacer que los aviones inactivos esten en las bodegas y los de reparacion en talleres
+"""
+def fillAvionFacturaBodega():
+    fillAvion()
+    fillBodegaAvion()
+    fillFactura()
 
 
 def fillTaller():
@@ -257,20 +281,17 @@ def fillTaller():
     for i in range(0, 50):
         Name = " ".join(random.choice(letras) for i in range(0, 1))
         Name += SecondPart[random.randrange(0, len(SecondPart))]
-        print(Name)
         c.execute(f"INSERT INTO Taller VALUES"
                   f"({i}, {random.randrange(0, 30)}, '{Name}')")
 
 
-avionesInactivos = []
-
-
 def fillAvion():
     """
-    sin terminar
-    :return:
+    Esta funcion rellena todos los datos de aviones, al mismo tiempo guarda
+    los id de los aviones inactivos y en reparacion para añadirlos
+    en talleres y demas
     """
-    loc = ('data/Aviones.xlsx')
+    loc = ('Aviones.xlsx')
     wb = xlrd.open_workbook(loc)
     sheet = wb.sheet_by_index(0)
 
@@ -291,12 +312,14 @@ def fillAvion():
             if i < 6:
                 estado = estados[i]
                 if estado == 'inactivo': avionesInactivos.append(idAvion)
+                if estado == 'reparacion': avionesReparacion.append(idAvion)
                 c.execute(f"INSERT INTO Avion VALUES({idAvion}, {idAerolinea}, '{codigo}', "
                           f"'{sheet.cell_value(idAvion, 0)}', {random.randrange(100, 200)}, {random.randrange(10, 100)},"
                           f"'{estado}', '{sheet.cell_value(idAvion, 1)}')")
             else:
                 estado = random.choice(estados)
                 if estado == 'inactivo': avionesInactivos.append(idAvion)
+                if estado == 'reparacion': avionesReparacion.append(idAvion)
                 c.execute(
                     f"INSERT INTO Avion VALUES({idAvion}, {idAerolinea}, '{codigo}', "
                     f"'{sheet.cell_value(idAvion, 0)}', {random.randrange(100, 200)}, {random.randrange(10, 100)},"
@@ -311,12 +334,19 @@ def fillBodegaAvion():
     inserta datos a tabla BodegaAvion
     """
     estados = [True, False]
-    for i in range(0, 100):
+
+    for i in range(0, len(avionesInactivos)):
         c.execute(f"INSERT INTO BodegaAvion VALUES"
-                  f"({i}, {random.randrange(0, 68)},'{estados[random.randrange(0, 2)]}')")
+                  f"({i}, {avionesInactivos[i]},'{True}')")
+    for j in range(len(avionesInactivos), 100):
+        c.execute(f"INSERT INTO BodegaAvion VALUES"
+                  f"({i}, {avionesInactivos[random.randrange(0, len(avionesInactivos))]},'{False}')")
 
 
 def fillControlador():
+    """
+    Este añade controladores para posteriormente ser usados en la conexion
+    """
     Nombres = ["Juan", "Ken", "Maria", "Juana", "Marco", "Jason", "Mario", "Luigi",
                "Somedude", "Wikitaker", "PrograVisor", "Valeria", "Randy", "Chelsey",
                "Sidney", "Jesus", "Belcebu", "Ana"]
@@ -329,6 +359,10 @@ def fillControlador():
 
 
 def fillConexion():
+    """
+    Realiza una conexion para cada controlador
+    :return:
+    """
     for i in range(0, 30):
         Hora = str(random.randrange(10, 24)) + ":" + str(random.randrange(10, 60))
         c.execute(f"INSERT INTO Conexion VALUES"
@@ -336,6 +370,10 @@ def fillConexion():
 
 
 def fillAvionAeropuerto():
+    """
+    Realiza la relacion entre aviones y areropuertos
+    :return:
+    """
     minutos = [15, 20, 25, 30, 35]
     horas = [10, 11, 12, 13, 14, 15, 16]
     estados = [True, False]
@@ -346,6 +384,10 @@ def fillAvionAeropuerto():
 
 
 def fillpasajero():
+    """
+    Este añade diferentes pasajeros para los diferentes vuelos de forma aleatoria
+    :return:
+    """
     Nombres = ["Juan", "Ken", "Maria", "Juana", "Marco", "Jason", "Mario", "Luigi",
                "Somedude", "Wikitaker", "PrograVisor", "Valeria", "Randy", "Chelsey",
                "Sidney", "Jesus", "Belcebu", "Ana"]
@@ -369,6 +411,10 @@ def fillpasajero():
 
 
 def fillEquipaje():
+    """
+    Añade equipaje para cada pasajero y luego añade equipajes random diferentes pasajeros
+    :return:
+    """
     for i in range(0, 300):
         c.execute(f"INSERT INTO Equipaje VALUES"
                   f"({i}, {random.randrange(0, 5)},{i})")
@@ -378,6 +424,10 @@ def fillEquipaje():
 
 
 def fillNumPasajero():
+    """
+    Añade un nnumero a cada pasajero y posteriormente realiza numeros random
+    :return:
+    """
     for i in range(0, 300):
         c.execute(f"INSERT INTO NumTelPasajero VALUES"
                   f"({i}, {i},{random.randrange(10000000, 99999999)})")
@@ -387,6 +437,10 @@ def fillNumPasajero():
 
 
 def fillEstadoVuelo():
+    """
+    Este añade los dos estados de vuelo
+    :return:
+    """
     enCurso = "en Curso"
     enEspera = "En espera"
     c.execute(f"INSERT INTO EstadoVuelo VALUES"
@@ -396,59 +450,57 @@ def fillEstadoVuelo():
 
 
 def fillVuelo():
+    """
+    Este añade datos random a  la tabla aeropuertos
+    :return:
+    """
     paises = ["Costa Rica", "Marruecos", "Rusia", "USA", "Kenia", "Laos", "Chad",
               "Ukrania", "Italia", "Reino Unido", "Francia", "Alemania", "Saudi",
               "Norte Africa", "Venezuela", "brazil", "Chile", "Argentina"]
     for i in range(0, 68):
         FechaSal = str(random.randrange(2000, 2030)) + "-" + str(random.randrange(0, 12)) + "-" + str(
             random.randrange(0, 30))
-        FechaLlegada= str(random.randrange(2000, 2030)) + "-" + str(random.randrange(0, 12)) + "-" + str(
+        FechaLlegada = str(random.randrange(2000, 2030)) + "-" + str(random.randrange(0, 12)) + "-" + str(
             random.randrange(0, 30))
         Hora = str(random.randrange(10, 24)) + ":" + str(random.randrange(10, 60))
         Hora2 = str(random.randrange(10, 24)) + ":" + str(random.randrange(10, 60))
         c.execute(f"INSERT INTO Vuelo VALUES"
-                  f"({i}, {i},'{random.randrange(0,2)}',"
+                  f"({i}, {i},'{random.randrange(0, 2)}',"
                   f"'{paises[random.randrange(0, len(paises))]}','{paises[random.randrange(0, len(paises))]}',"
-                  f"'{random.randrange(1000,5000)}','{FechaSal}','{FechaLlegada}',"
-                  f"'{Hora}','{Hora2}',{random.randrange(100,300)})")
+                  f"'{random.randrange(1000, 5000)}','{FechaSal}','{FechaLlegada}',"
+                  f"'{Hora}','{Hora2}',{random.randrange(100, 300)})")
 
 
 if __name__ == '__main__':
-    # try:
-    global idEmpleado
-    conn = sqlite3.connect('C:\Work\DabaseHomework1\HomeWork-1-Database\database.db')
-    c = conn.cursor()
-    fillVuelo()
-    # fillNumPasajero()
-    # fillEstadoVuelo()
-    # fillEquipaje()
-    # fillpasajero()
-    # fillFactura()
-    # fillBodegaAvion()
-    # fillRelClasesAvion()
-    # fillClasesAvion()
-    # fillRepuesto()
-    # fillDamage()
-    # fillAvionAeropuerto()
-    # fillTaller()
-    # fillControlador()
-    # fillConexion()
-    # fillAeropuerto()
-    # fillNumTelAeropuerto()
-    # fillAerolinea()
-    # fillEmpleadoAerolinea()
-    # fillEmpleadoAeropuerto()
-    #    fillAerolineaAeropuerto()
-    #  print(avionesInactivos)
-    # fillAvion()
-    # fillAeropuertoAerolinea()
-    # fillControlador()
-    # fillRepuesto()
-    # fillFactura()
-    # fillBodega()
-    conn.commit()
-    c.close()
-    conn.close()
+    try:
+        global idEmpleado
+        conn = sqlite3.connect('C:\Work\DabaseHomework1\HomeWork-1-Database\database.db')
+        c = conn.cursor()
+        fillAvionFacturaBodega()
+        fillVuelo()
+        fillNumPasajero()
+        fillEstadoVuelo()
+        fillEquipaje()
+        fillpasajero()
+        fillRelClasesAvion()
+        fillClasesAvion()
+        fillRepuesto()
+        fillDamage()
+        fillAvionAeropuerto()
+        fillTaller()
+        fillControlador()
+        fillConexion()
+        fillAeropuerto()
+        fillNumTelAeropuerto()
+        fillAerolinea()
+        fillEmpleadoAerolinea()
+        fillEmpleadoAeropuerto()
+        fillAvion()
+        fillAeropuertoAerolinea()
+        fillBodega()
+        conn.commit()
+        c.close()
+        conn.close()
 
-# except Exception as e:
-#     print("ERROR: " + str(e))
+    except Exception as e:
+        print("ERROR: " + str(e))
