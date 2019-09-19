@@ -28,31 +28,35 @@ GROUP BY empleado.IdAeropuerto
 ;
 
 --Empleado mas pagado de aeropuerto y aerolinea
-SELECT empleadoAerolinea.*, empleadoAeropuerto.*
-FROM (SELECT empleado.*
-      FROM EmpleadoAeropuerto empleado
+SELECT empleadoAerolinea.*
+FROM (SELECT empleado.*,E.*
+      FROM EmpleadoAeropuerto empleado INNER JOIN Empleado E on empleado.IdEmpleado = E.IdEmpleado
       WHERE 1 = empleado.IdAeropuerto
       ORDER BY (empleado.Salario) DESC
-      LIMIT 1) AS empleadoAerolinea,
-     (SELECT empleado.*
-      FROM empleadoAerolinea empleado
+      LIMIT 1) AS empleadoAerolinea
+UNION ALL
+SELECT empleadoAeropuerto.*
+FROM (SELECT empleado.*,E2.*
+      FROM empleadoAerolinea empleado INNER JOIN Empleado E2 on empleado.IdEmpleado = E2.IdEmpleado
       WHERE 1 = empleado.IdAerolinea
       ORDER BY (empleado.Salario) DESC
       LIMIT 1) AS empleadoAeropuerto;
 --Empleado mas pagado de todos
-SELECT empleadoAerolinea.*, empleadoAeropuerto.*
+SELECT empleadoAeropuerto.*
 FROM (SELECT trabajador.*, E.*
       FROM EmpleadoAeropuerto trabajador
                INNER JOIN Empleado E on trabajador.IdEmpleado = E.IdEmpleado
       ORDER BY trabajador.Salario
       LIMIT 1
-     ) AS empleadoAeropuerto,
-     (SELECT  trabajador2.*, E2.*
-         FROM EmpleadoAerolinea trabajador2
-         INNER JOIN  Empleado E2 on trabajador2.IdEmpleado = E2.IdEmpleado
-         ORDER BY trabajador2.Salario
-         LIMIT 1
-         ) AS empleadoAerolinea;
+     ) AS empleadoAeropuerto
+UNION ALL
+SELECT empleadoAerolinea.*
+FROM (SELECT trabajador2.*, E2.*
+      FROM EmpleadoAerolinea trabajador2
+               INNER JOIN Empleado E2 on trabajador2.IdEmpleado = E2.IdEmpleado
+      ORDER BY trabajador2.Salario
+      LIMIT 1
+     ) AS empleadoAerolinea;
 
 --Cantidad de aviones activos de una aerolinea
 
