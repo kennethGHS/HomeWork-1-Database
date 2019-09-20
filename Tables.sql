@@ -122,18 +122,24 @@ CREATE TABLE IF NOT EXISTS Repuesto
 
 CREATE TABLE IF NOT EXISTS Vuelo
 (
-    IdVuelo      INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    IdAvion      INTEGER NOT NULL,
-    IdEstado     INTEGER NOT NULL,
-    Destino      TEXT    NOT NULL,
-    Origen       TEXT    NOT NULL,
-    NumeroVuelo  TEXT    NOT NULL,
-    FechaSalida  DATE    NOT NULL,
-    FechaLlegada DATE    NOT NULL,
-    HoraSalida   TIME    NOT NULL,
-    HoraLlegada  TIME    NOT NULL,
-    Precio       DOUBLE  NOT NULL,
+    IdVuelo             INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    IdAvion             INTEGER NOT NULL,
+    IdAerolinea         INTEGER NOT NULL,
+    IdEstado            INTEGER NOT NULL,
+    IdAeropuertoOrigen  INTEGER NOT NULL,
+    IdAeropuertoDestino INTEGER NOT NULL,
+    Destino             TEXT    NOT NULL,
+    Origen              TEXT    NOT NULL,
+    NumeroVuelo         TEXT    NOT NULL,
+    FechaSalida         DATE    NOT NULL,
+    FechaLlegada        DATE    NOT NULL,
+    HoraSalida          TIME    NOT NULL,
+    HoraLlegada         TIME    NOT NULL,
+    Precio              DOUBLE  NOT NULL,
     FOREIGN KEY (IdAvion) REFERENCES Avion (IdAvion),
+    FOREIGN KEY (IdAerolinea) REFERENCES Aerolinea (IdAerolinea),
+    FOREIGN KEY (IdAeropuertoOrigen) REFERENCES Aeropuerto (IdAeropuerto),
+    FOREIGN KEY (IdAeropuertoDestino) REFERENCES Aeropuerto (IdAeropuerto),
     FOREIGN KEY (IdEstado) REFERENCES EstadoVuelo (IdEstado)
 );
 
@@ -196,58 +202,6 @@ CREATE TABLE IF NOT EXISTS Conexion
     FOREIGN KEY (IdVuelo) REFERENCES Vuelo (IdVuelo)
 );
 
--- select aero.*
--- FROM (select avion.IdAerolinea
---       FROM Avion avion
---       GROUP BY avion.IdAerolinea
---       ORDER BY COUNT(avion.IdAerolinea) desc) result,
---      Aerolinea aero
--- WHERE aero.IdAerolinea = result.IdAerolinea
--- LIMIT 10;
-
--- INSERT INTO Aerolinea(CodigoAerolinea,Nombre)
--- values ('123K','AMERICAN AIRLINES'),
---        ('123L','AMERICAN HAIRLINES'),
---        ('123M','AMERICAN CARLINES');
---        ('123B','CRHOY'),
---        ('123C','NACION'),
---        ('123D','AMERICANBEATINGS'),
---        ('123E','HITYOU'),
---        ('123F','NOTYOURSIT'),
---        ('123G','YOUTSIT'),
---        ('123H','MALASIA LOSTYOU'),
---        ('123I','MALASIA FOUNDYOU'),
---        ('123J','MALASIA CRAHSINTHEOCEAN');
-
--- INSERT INTO Avion(idaerolinea, codigoavion, modelo, capacidadtrip, capacidaditer, estado, fabricante)
--- VALUES (1, 'ABC1', 'REDDRAGON', 2, 234, 'ACTIVO', 'YAMAHA'),
---        (1, 'ABC2', 'ASUS', 2, 234, 'ACTIVO', 'YAMAHA'),
---        (1, 'ABC3', 'ASUS', 2, 234, 'ACTIVO', 'YAMAHA'),
---        (1, 'ABC4', 'USA', 2, 234, 'ACTIVO', 'ZUZUKI'),
---        (2, 'ABC5', 'CR', 2, 234, 'ACTIVO', 'ZUZUKI'),
---        (2, 'ABC6', 'COLA', 2, 234, 'ACTIVO', 'ZUZUKI'),
---        (2, 'ABC7', 'MEME', 2, 234, 'ACTIVO', 'ZUZUKI'),
---        (3, 'ABC8', 'NOMBRE', 2, 234, 'ACTIVO', 'YAMAHA'),
---        (3, 'ABC9', 'REDDRAGON', 2, 234, 'ACTIVO', 'USA'),
---        (3, 'ABC10', 'INTELLIJ', 2, 234, 'ACTIVO', 'USA'),
---        (4, 'ABC11', 'JETBRAINS', 2, 234, 'ACTIVO', 'USA'),
---        (4, 'ABC12', 'MOIR', 2, 234, 'ACTIVO', 'USA'),
---        (4, 'ABC13', 'MORA', 2, 234, 'ACTIVO', 'USA'),
---        (5, 'ABC14', 'CASA123', 2, 234, 'ACTIVO', 'USA'),
---        (5, 'ABC15', 'BOEING', 2, 234, 'ACTIVO', 'USA'),
---        (6, 'ABC16', 'MODELNAME2', 2, 234, 'ACTIVO', 'MIKSA'),
---        (6, 'ABC17', 'COLA', 2, 234, 'ACTIVO', 'MIKSA'),
---        (7, 'ABC18', 'COLA', 2, 234, 'ACTIVO', 'YAMAHA'),
---        (7, 'ABC19', 'COLA', 2, 234, 'ACTIVO', 'MIKSA'),
---        (8, 'ABC20', 'ASUS', 2, 234, 'ACTIVO', 'YAMAHA'),
---        (8, 'ABC21', 'ASUS', 2, 234, 'ACTIVO', 'MIKSA'),
---        (9, 'ABC22', 'ASUS', 2, 234, 'ACTIVO', 'LOL'),
---        (9, 'ABC23', 'POLO12', 2, 234, 'ACTIVO', 'YAMAHA'),
---        (10, 'ABC24', 'POLO12', 2, 234, 'ACTIVO', 'YAMAHA'),
---        (11, 'ABC25', 'POLO12', 2, 234, 'ACTIVO', 'LOL'),
---        (11, 'ABC26', 'REDDRAGON', 2, 234, 'ACTIVO', 'LOL');
-
-
 CREATE TABLE IF NOT EXISTS EmpleadoAeropuerto
 (
     IdEmpleado   INTEGER NOT NULL,
@@ -309,3 +263,17 @@ CREATE TABLE IF NOT EXISTS PuestoAerolinea
 -- VALUES (0, 'Piloto'),
 --        (1, 'Azafata'),
 --        (2, 'Copiloto');
+
+CREATE TABLE IF NOT EXISTS Intervalos
+(
+    IdIntervalo INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    Hora1       TIME    NOT NULL,
+    Hora2       TIME    NOT NULL
+);
+
+INSERT INTO Intervalos(IdIntervalo, Hora1, Hora2)
+VALUES (0, '08:00', '12:00'),
+       (1, '12:00', '16:00'),
+       (2, '16:00', '20:00'),
+       (3, '20:00', '23:59')
+

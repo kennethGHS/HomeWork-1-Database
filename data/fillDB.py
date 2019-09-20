@@ -40,19 +40,25 @@ def fillNumTelAeropuerto():
             idNumTelAeropuerto += 1
         idAeropuerto += 1
 
+
 """
 Crea una cantidad determinada de aerolineas con sus datos unicos
 """
+
+
 def fillAerolinea():
     with open('Aerolineas.json', 'r') as f:
         data = json.load(f)
     for i in range(0, numOfAirlines):
         c.execute(f"INSERT INTO Aerolinea VALUES({i}, '{data[i]['iata']}', '{data[i]['name']}')")
 
+
 """
 Esta funcion rellena la tabla que realiza la relacion entre aerolineas
 y aeropuertos
 """
+
+
 def fillAeropuertoAerolinea():
     idAeropuerto = 0
     while idAeropuerto < numOfAirports:
@@ -162,8 +168,6 @@ def fillBodega():
                   f"({i}, {random.randrange(0, 30)}, '{Name}')")
 
 
-
-
 def fillClasesAvion():
     """
         Crea las 3 clases de avion disponibles
@@ -253,10 +257,13 @@ def fillFactura():
                   f"({i}, {random.randrange(0, 30)}, {random.randrange(0, 20)},"
                   f"{random.randrange(0, 9999999)},'{Hora}','{Hora2}','{FechaEnt}','{FechaSal}')")
 
+
 """
 Esta funcion lo que realiza es el llamar las funciones de rellenar aviones y relaciones de bodegas junto a la factura
 esto para hacer que los aviones inactivos esten en las bodegas y los de reparacion en talleres
 """
+
+
 def fillAvionFacturaBodega():
     fillAvion()
     fillBodegaAvion()
@@ -456,11 +463,13 @@ def fillVuelo():
             random.randrange(0, 30))
         Hora = str(random.randrange(10, 24)) + ":" + str(random.randrange(10, 60))
         Hora2 = str(random.randrange(10, 24)) + ":" + str(random.randrange(10, 60))
+        IdAeropuertoOrigen = random.randrange(0, 30)
+        IdAeropuertoDestino = random.randrange(0, 30)
         c.execute(f"INSERT INTO Vuelo VALUES"
-                  f"({i}, {i},'{random.randrange(0, 2)}',"
-                  f"'{paises[random.randrange(0, len(paises))]}','{paises[random.randrange(0, len(paises))]}',"
-                  f"'{random.randrange(1000, 5000)}','{FechaSal}','{FechaLlegada}',"
-                  f"'{Hora}','{Hora2}',{random.randrange(100, 300)})")
+                  f"({i}, {i}, {random.randrange(0, 8)}, '{random.randrange(0, 2)}', {IdAeropuertoOrigen},"
+                  f"{IdAeropuertoDestino}, '{paises[random.randrange(0, len(paises))]}',"
+                  f"'{paises[random.randrange(0, len(paises))]}','{random.randrange(1000, 5000)}','{FechaSal}',"
+                  f"'{FechaLlegada}','{Hora}','{Hora2}',{random.randrange(100, 300)})")
 
 
 if __name__ == '__main__':
@@ -468,6 +477,7 @@ if __name__ == '__main__':
         global idEmpleado
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
+
         fillAvionFacturaBodega()
         fillVuelo()
         fillNumPasajero()
@@ -490,6 +500,7 @@ if __name__ == '__main__':
         fillAvion()
         fillAeropuertoAerolinea()
         fillBodega()
+
         conn.commit()
         c.close()
         conn.close()
